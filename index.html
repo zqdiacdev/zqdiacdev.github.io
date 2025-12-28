@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZODIAC | 2026 ARMORED</title>
+    <title>ZODIAC | 2026 ARMORED CLOUD</title>
     
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="icon" type="image/x-icon" href="indir (1).jfif">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root { --primary-red: #ff0000; }
         
-        /* BAN EKRANI (TAM KORUMA) */
         #ban-screen { 
             display: none; position: fixed; inset: 0; background: #000; z-index: 1000000; 
             color: #fff; flex-direction: column; justify-content: center; align-items: center; 
@@ -58,7 +58,7 @@
 
         #admin-panel { 
             display: none; position: fixed; top: 100px; left: 100px; 
-            width: 650px; height: 450px; 
+            width: 700px; height: 500px; 
             background: #000; border: 2px solid red; z-index: 9999; 
             flex-direction: column; overflow: hidden;
             resize: both; 
@@ -70,9 +70,8 @@
         .t-btn.active { color: white; background: #111; border-bottom: 2px solid red; }
         .t-content { flex: 1; overflow-y: auto; padding: 15px; color: #0f0; font-size: 11px; background: #050505; }
         
-        .data-row { display: flex; justify-content: space-between; border-bottom: 1px solid #111; padding: 10px 5px; align-items: center; gap: 10px; }
-        .meta-info { color: #888; font-size: 10px; flex: 1; text-align: right; }
-        .ban-btn { background: red; color: white; border: none; padding: 4px 8px; cursor: pointer; font-size: 9px; }
+        .data-row { border-bottom: 1px solid #222; padding: 12px 5px; display: flex; justify-content: space-between; align-items: center; }
+        .ban-btn { background: red; color: white; border: none; padding: 8px 15px; cursor: pointer; font-size: 10px; font-weight: bold; }
         .unban-btn { background: #00ff00; color: #000; border: none; padding: 4px 8px; cursor: pointer; font-size: 9px; font-weight: bold; }
 
         #auth-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000; justify-content: center; align-items: center; }
@@ -117,7 +116,7 @@
         <footer>
             <div id="serverTime" style="color: red; font-weight: bold; margin-bottom: 5px;">Yükleniyor...</div>
             <div>© 2026 ZODIAC. Tüm hakları saklıdır.</div>
-            <div style="font-size:9px; margin-top:5px; color:#222;">ZODIAC v10.0-ARMORED</div>
+            <div style="font-size:9px; margin-top:5px; color:#222;">ZODIAC v10.0-ARMORED CLOUD</div>
         </footer>
     </div>
 
@@ -125,13 +124,11 @@
         <div class="p-header" id="pDraggable"><span>ZODIAC COMMAND CENTER</span><span onclick="this.parentElement.parentElement.style.display='none'" style="cursor:pointer;">[X]</span></div>
         <div class="p-tabs">
             <button class="t-btn active" onclick="tab(event, 'l-tab')">MÜHÜRLER</button>
-            <button class="t-btn" onclick="tab(event, 'd-tab')">CİHAZLAR & IP</button>
             <button class="t-btn" onclick="tab(event, 'b-tab')">BAN LİSTESİ</button>
         </div>
         <div id="l-tab" class="t-content" style="display:block;"></div>
-        <div id="d-tab" class="t-content" style="display:none;"></div>
         <div id="b-tab" class="t-content" style="display:none;"></div>
-        <div style="padding:10px; background:#111;"><button onclick="localStorage.clear(); location.reload();" style="width:100%; background:#222; color:red; border:none; padding:8px; font-size:9px;">SYSTEM RESET</button></div>
+        <div style="padding:10px; background:#111;"><button onclick="systemReset()" style="width:100%; background:#222; color:red; border:none; padding:8px; font-size:9px;">DATABASE RESET</button></div>
     </div>
 
     <div id="auth-overlay">
@@ -143,15 +140,15 @@
     </div>
 
     <script>
-        // --- TEMEL SİSTEM DEĞİŞKENLERİ ---
+        // --- SUPABASE BAĞLANTISI ---
+        const SUPABASE_URL = 'SENİN_URL_BURAYA';
+        const SUPABASE_KEY = 'SENİN_KEY_BURAYA';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         const getID = () => btoa(navigator.userAgent).substring(10, 25);
-        let mühürler = JSON.parse(localStorage.getItem('z_muhurler') || '[]');
-        let bans = JSON.parse(localStorage.getItem('z_bans') || '[]');
-        let devs = JSON.parse(localStorage.getItem('z_devs') || '[]');
-        let isAdmin = false; // Admin modu aktifse ban tetiklenmez
+        let isAdmin = false;
         let buffer = "";
 
-        // --- IP VE GÜVENLİK KONTROLÜ ---
         async function getIP() {
             try {
                 const r = await fetch('https://api.ipify.org?format=json');
@@ -159,49 +156,6 @@
             } catch(e) { return "0.0.0.0"; }
         }
 
-        async function checkSecurity() {
-            const ip = await getIP();
-            const id = getID();
-            
-            // Banlı mı kontrol et
-            if(bans.some(b => b.ip === ip || b.id === id)) {
-                triggerBanScreen(ip, id);
-            }
-        }
-        checkSecurity();
-
-        function triggerBanScreen(ip, id) {
-            document.getElementById('main-content').innerHTML = "";
-            document.getElementById('ban-screen').style.display = 'flex';
-            document.getElementById('ban-details').innerText = `IDENTIFIER: ${ip} | ${id}`;
-            // Sayfadaki her şeyi durdur
-            throw new Error("SYSTEM_LOCKED");
-        }
-
-        async function forceBan() {
-            if(isAdmin) return; // Sen admin'sen banlanma
-            const ip = await getIP();
-            const id = getID();
-            if(!bans.find(b => b.ip === ip)) {
-                bans.push({ip, id, date: new Date().toLocaleString()});
-                localStorage.setItem('z_bans', JSON.stringify(bans));
-            }
-            location.reload();
-        }
-
-        // --- F12 / INSPECT DEDEKTÖRÜ (THE TRAP) ---
-        (function() {
-            const detect = () => {
-                const start = new Date();
-                debugger; // Eğer console açıksa burada takılır
-                if (new Date() - start > 100) {
-                    forceBan();
-                }
-            };
-            setInterval(detect, 1000);
-        })();
-
-        // --- DİĞER FONKSİYONLAR ---
         function getFullDevice() {
             const ua = navigator.userAgent;
             let os = "PC";
@@ -210,15 +164,23 @@
             return `${os} (${navigator.platform})`;
         }
 
-        function tab(evt, id) {
-            document.querySelectorAll('.t-content').forEach(c => c.style.display = 'none');
-            document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).style.display = 'block';
-            evt.currentTarget.classList.add('active');
-            if(id === 'b-tab') renderBans();
-            if(id === 'd-tab') renderDevs();
+        // --- GÜVENLİK KONTROLÜ ---
+        async function checkSecurity() {
+            const ip = await getIP();
+            const id = getID();
+            
+            const { data: banData } = await supabase.from('bans').select('*').or(`ip.eq.${ip},device_id.eq.${id}`);
+            
+            if(banData && banData.length > 0) {
+                document.getElementById('main-content').innerHTML = "";
+                document.getElementById('ban-screen').style.display = 'flex';
+                document.getElementById('ban-details').innerText = `ID: ${id} | IP: ${ip}`;
+                throw "SİSTEM_KİLİTLENDİ";
+            }
         }
+        checkSecurity();
 
+        // --- MÜHÜRLEME (YENİ DETAYLI KAYIT) ---
         async function generateMemory() {
             const name = document.getElementById('nameInput').value;
             if(!name) return;
@@ -226,76 +188,103 @@
             const ip = await getIP();
             const id = getID();
             const dev = getFullDevice();
-            const time = new Date().toLocaleTimeString();
 
-            mühürler.push({ name, ip, id, dev, time });
-            localStorage.setItem('z_muhurler', JSON.stringify(mühürler));
+            // Supabase'e tüm detayları gönder
+            await supabase.from('muhurler').insert([{ 
+                name: name, 
+                ip: ip, 
+                device_id: id, 
+                device_info: dev 
+            }]);
 
-            // Admin panel listesini güncelle
-            renderLogs();
-
-            // Canvas
+            // Görsel Efekt
             const c = document.getElementById('memoryCanvas'); const ctx = c.getContext('2d');
             c.width = 800; c.height = 150;
             ctx.fillStyle="#000"; ctx.fillRect(0,0,800,150);
             ctx.fillStyle="#fff"; ctx.font="bold 40px Courier New"; ctx.textAlign="center";
             ctx.fillText(name.toUpperCase(), 400, 85);
             document.getElementById('memory-display').style.display="block";
+            document.getElementById('nameInput').value = "";
+            
+            if(isAdmin) renderLogs();
         }
 
-        function renderLogs() {
-            const l = document.getElementById('l-tab');
-            l.innerHTML = mühürler.map(m => `
+        // --- ADMIN PANEL (İSTİHBARAT SATIRI ENTEGRELİ) ---
+        async function renderLogs() {
+            const { data } = await supabase.from('muhurler').select('*').order('created_at', { ascending: false });
+            const logTab = document.getElementById('l-tab');
+            
+            logTab.innerHTML = data.map(m => {
+                const timeStr = new Date(m.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                return `
+                    <div class="data-row">
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="color: #0f0; font-weight: bold; font-size: 13px;">${m.name}</span>
+                                <span style="color: #444; font-size: 9px;">[${timeStr}]</span>
+                            </div>
+                            <div style="font-size: 9px; color: #777; margin-top: 2px;">
+                                <span style="color: red;">IP:</span> ${m.ip} | <span style="color: red;">ID:</span> ${m.device_id}
+                            </div>
+                            <div style="font-size: 9px; color: #444;">
+                                <i class="fas fa-microchip"></i> ${m.device_info}
+                            </div>
+                        </div>
+                        <button class="ban-btn" onclick="banProcess('${m.ip}', '${m.device_id}')">BAN</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function banProcess(ip, id) {
+            await supabase.from('bans').insert([{ ip, device_id: id }]);
+            alert("ERİŞİM ENGELLENDİ.");
+            renderBans();
+        }
+
+        async function renderBans() {
+            const { data } = await supabase.from('bans').select('*');
+            document.getElementById('b-tab').innerHTML = data.map(b => `
                 <div class="data-row">
-                    <span>${m.name}</span>
-                    <span class="meta-info">${m.ip} | ${m.dev}</span>
-                    <button class="ban-btn" onclick="banUser('${m.ip}', '${m.id}')">BAN</button>
-                </div>
-            `).reverse().join('');
-        }
-
-        function banUser(ip, id) {
-            if(!bans.find(b => b.ip === ip)) {
-                bans.push({ip, id, date: new Date().toLocaleString()});
-                localStorage.setItem('z_bans', JSON.stringify(bans));
-                renderBans();
-            }
-        }
-
-        function renderBans() {
-            document.getElementById('b-tab').innerHTML = bans.map((b, i) => `
-                <div class="data-row">
-                    <span>${b.ip}</span>
-                    <button class="unban-btn" onclick="bans.splice(${i},1); localStorage.setItem('z_bans', JSON.stringify(bans)); renderBans();">KALDIR</button>
+                    <span>${b.ip} <small style="color:#444">(${b.device_id})</small></span>
+                    <button class="unban-btn" onclick="unbanProcess('${b.id}')">KALDIR</button>
                 </div>
             `).join('');
         }
 
-        function renderDevs() {
-            document.getElementById('d-tab').innerHTML = devs.map(d => `
-                <div class="data-row">
-                    <span>${d.id}</span>
-                    <div class="meta-info">${d.ip} | ${d.info}</div>
-                </div>`).reverse().join('');
+        async function unbanProcess(id) {
+            await supabase.from('bans').delete().eq('id', id);
+            renderBans();
         }
 
+        // --- SİSTEM AYARLARI ---
         function checkKeys(e) {
             buffer += e.key.toUpperCase();
             if(buffer.includes("L11")) { document.getElementById('auth-overlay').style.display='flex'; buffer=""; }
         }
 
-        async function verify() {
+        function verify() {
             if(document.getElementById('mPass').value === "1515") {
-                isAdmin = true; // Güvenli mod
+                isAdmin = true;
                 document.getElementById('auth-overlay').style.display='none';
                 document.getElementById('admin-panel').style.display='flex';
                 renderLogs();
-                const ip = await getIP();
-                const id = getID();
-                if(!devs.find(x => x.id === id)) {
-                    devs.push({id, ip, info: getFullDevice()});
-                    localStorage.setItem('z_devs', JSON.stringify(devs));
-                }
+            }
+        }
+
+        function tab(evt, id) {
+            document.querySelectorAll('.t-content').forEach(c => c.style.display = 'none');
+            document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).style.display = 'block';
+            evt.currentTarget.classList.add('active');
+            if(id === 'b-tab') renderBans();
+            if(id === 'l-tab') renderLogs();
+        }
+
+        async function systemReset() {
+            if(confirm("Tüm bulut veritabanı sıfırlanacak. Emin misin?")) {
+                await supabase.from('muhurler').delete().neq('name', '0');
+                renderLogs();
             }
         }
 
@@ -304,7 +293,7 @@
             document.getElementById('serverTime').innerText = `TR/İST: ${d.toLocaleDateString('tr-TR')} ${d.toLocaleTimeString('tr-TR')}`;
         }, 1000);
 
-        // Sürükleme
+        // Sürükleme Mantığı
         const p = document.getElementById("admin-panel");
         const dz = document.getElementById("pDraggable");
         let active = false, oX, oY;
