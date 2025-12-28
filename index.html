@@ -2,186 +2,218 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>ZODIAC & CELLAT | 2026</title>
+    <title>ZODIAC | 2026 MONITOR</title>
     <link rel="icon" type="image/x-icon" href="indir (1).jfif">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary-red: #ff0000; }
         body { 
-            margin: 0; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3R5cXNid2Z6Z3IycXN3bmN3bmN3bmN3bmN3bmN3JmNoYXJzPXo/w0YROIlXXXl5k0yyvW/giphy.gif'); 
-            background-size: cover; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; display: flex; justify-content: center; min-height: 100vh; overflow: hidden;
+            margin: 0; padding: 0; 
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); 
+            background-size: cover; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; 
+            display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden;
         }
-        .container { width: 95%; max-width: 900px; text-align: center; padding: 20px 0; }
-        
-        /* OWNER & FOUNDER PANELI (SOSYAL IKONLAR DAHIL) */
-        .guild-panel { background: rgba(5,5,5,0.95); border: 1px solid #111; padding: 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-left: 4px solid red; }
-        .info-box { display: flex; gap: 40px; }
-        .info-item { border-left: 2px solid red; padding-left: 15px; text-align: left; }
-        .info-label { color: red; font-size: 11px; font-weight: bold; }
-        .info-value { color: white; font-size: 20px; font-weight: bold; }
-        .social-icons { margin-top: 8px; display: flex; gap: 15px; font-size: 18px; }
-        .social-icons a { color: #555; transition: 0.3s; }
-        .social-icons a:hover { color: red; }
-        .owner-img { width: 90px; height: 90px; border: 1px solid red; object-fit: cover; }
+        .container { width: 95%; max-width: 900px; text-align: center; padding: 40px 0; }
+        .zodiac-title { font-size: 80px; font-weight: 900; letter-spacing: 25px; margin-bottom: 30px; color: white; }
 
-        /* DATABASE KARTI */
-        .card { background: rgba(5,5,5,0.95); border: 1px solid #222; border-left: 4px solid var(--primary-red); padding: 25px; margin-bottom: 15px; text-align: left; }
+        /* YENİ TASARIM: OWNER & FOUNDER PANEL */
+        .guild-header { 
+            background: rgba(5, 5, 5, 0.95); border: 1px solid #111; 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 20px 40px; border-radius: 4px; margin-bottom: 20px;
+        }
+        .info-grid { display: flex; gap: 50px; align-items: center; }
+        .guild-item { border-left: 3px solid var(--primary-red); padding-left: 15px; text-align: left; }
+        .tag { color: var(--primary-red); font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .val { font-size: 22px; font-weight: bold; color: #fff; display: block; }
+        
+        .social-box { display: flex; gap: 20px; font-size: 24px; align-items: center; }
+        .social-box a { color: white; transition: 0.3s; text-decoration: none; }
+        .social-box a:hover { color: var(--primary-red); filter: drop-shadow(0 0 8px red); }
+
+        .avatar-frame { border: 2px solid var(--primary-red); width: 85px; height: 85px; overflow: hidden; }
+        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* MÜHÜRLEME KARTI */
+        .card { background: rgba(5, 5, 5, 0.9); border: 1px solid #222; border-left: 4px solid var(--primary-red); padding: 25px; text-align: left; margin-bottom: 20px; }
         .input-group { display: flex; gap: 15px; margin-top: 10px; }
         input { flex: 1; background: #000; border: 1px solid #333; color: #fff; padding: 12px; outline: none; font-family: 'Consolas'; }
         button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; }
 
-        /* MÜHÜRLENİNCE ÇIKAN PANEL */
-        #result-display { display: none; margin-top: 10px; }
-        .target-box { position: relative; width: 100%; background: rgba(0,0,0,0.95); border: 1px solid red; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
-        .target-photo-wrap { position: relative; width: 120px; height: 120px; border: 1px solid red; background: #000; }
-        .target-photo-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
-        .target-name-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: red; font-weight: 900; font-size: 18px; text-shadow: 0 0 10px black; width: 100%; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+        /* MÜHÜRLENİNCE AÇILAN FOTOĞRAFLI PANEL */
+        #result-panel { display: none; margin-top: 10px; }
+        .result-box { 
+            background: rgba(0,0,0,0.95); border: 1px solid var(--primary-red); 
+            display: flex; justify-content: space-between; align-items: center; padding: 20px;
+        }
+        .photo-wrap { position: relative; width: 110px; height: 110px; border: 1px solid red; }
+        .photo-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+        .name-on-photo { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            color: red; font-weight: 900; font-size: 16px; width: 100%; text-align: center; text-shadow: 0 0 10px #000;
+        }
 
-        /* HAREKETLİ SQL PANEL */
+        /* SQL PANEL (HAREKETLİ) */
         #admin-panel { 
-            display: none; position: fixed; top: 100px; left: 100px; 
-            width: 630px; height: 450px; background: #000; border: 2px solid red; 
+            display: none; position: fixed; top: 50px; left: 50px; 
+            width: 550px; height: 400px; background: #000; border: 2px solid red; 
             z-index: 9999; flex-direction: column; box-shadow: 0 0 50px #000;
         }
-        .p-header { background: red; color: white; padding: 12px; font-weight: bold; display: flex; justify-content: space-between; cursor: move; }
-        .tabs { display: flex; background: #111; border-bottom: 1px solid #333; }
-        .tab-btn { flex: 1; padding: 12px; border: none; background: transparent; color: #555; cursor: pointer; font-family: 'Consolas'; font-weight: bold; }
-        .tab-btn.active { color: white; background: #050505; border-bottom: 2px solid red; }
-        .log-box { flex: 1; overflow-y: auto; padding: 10px; color: #0f0; font-size: 11px; background: #020202; }
+        .p-header { background: red; color: white; padding: 10px; font-weight: bold; cursor: move; display: flex; justify-content: space-between; }
+        .p-tabs { display: flex; background: #111; }
+        .t-btn { flex: 1; padding: 10px; background: transparent; color: #555; border: none; cursor: pointer; font-weight: bold; font-family: 'Consolas'; }
+        .t-btn.active { color: white; background: #080808; border-bottom: 2px solid red; }
+        .p-content { flex: 1; overflow-y: auto; padding: 10px; color: #0f0; font-size: 11px; }
         
-        .data-row { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #111; }
-        .data-content { display: flex; gap: 10px; align-items: center; }
-        .tag-red { color: red; font-size: 10px; border: 1px solid red; padding: 1px 5px; font-weight: bold; }
+        .data-row { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #111; align-items: center; }
+        .data-meta { color: red; font-weight: bold; font-size: 10px; margin-left: 10px; }
 
-        footer { margin-top: 40px; }
+        footer { margin-top: 40px; font-size: 12px; color: #666; letter-spacing: 2px; }
     </style>
 </head>
 <body onkeydown="checkKeys(event)">
 
     <div class="container">
-        <h1 style="letter-spacing: 25px; font-size: 80px; margin-bottom: 20px;">ZODIAC</h1>
-        
-        <div class="guild-panel">
-            <div class="info-box">
-                <div class="info-item">
-                    <div class="info-label">OWNER</div>
-                    <div class="info-value">Zodiac</div>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-discord"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">FOUNDER</div>
-                    <div class="info-value">Cellat</div>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-discord"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
+        <h1 class="zodiac-title">ZODIAC</h1>
+
+        <div class="guild-header">
+            <div class="info-grid">
+                <div class="guild-item"><span class="tag">Owner</span><span class="val">Zodiac</span></div>
+                <div class="guild-item"><span class="tag">Founder</span><span class="val">Cellat</span></div>
+                <div class="social-box">
+                    <a href="https://discordapp.com/users/984393535811903488" target="_blank"><i class="fab fa-discord"></i></a>
+                    <a href="https://www.instagram.com/maybe.c3llat" target="_blank"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
-            <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3R5cXNid2Z6Z3IycXN3bmN3bmN3bmN3bmN3bmN3JmNoYXJzPXo/LMc7wS6I301xS65j9I/giphy.gif" class="owner-img">
+            <div class="avatar-frame">
+                <img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif" alt="PIRATE">
+            </div>
         </div>
 
         <div class="card">
-            <div style="color:red; font-size:11px; font-weight:bold; letter-spacing: 2px;">[DATABASE ACCESS] - MÜHÜRLEME SİSTEMİ</div>
+            <div style="color:red; font-size:11px; font-weight:bold;">[SQL TERMINAL] - MÜHÜRLEME SİSTEMİ</div>
             <div class="input-group">
-                <input type="text" id="nameIn" placeholder="Mühürlenecek ismi girin...">
+                <input type="text" id="nameInput" placeholder="Mühürlenecek ismi girin...">
                 <button onclick="saveMuhur()">KAYDET</button>
             </div>
         </div>
 
-        <div id="result-display">
-            <div class="target-box">
-                <div class="info-box">
-                    <div class="info-item"><div class="info-label">TARGET</div><div id="res-name" class="info-value">-</div></div>
-                    <div class="info-item"><div class="info-label">IP ADDRESS</div><div id="res-ip" class="info-value">...</div></div>
-                    <div class="info-item"><div class="info-label">PLATFORM</div><div id="res-dev" class="info-value">...</div></div>
+        <div id="result-panel">
+            <div class="result-box">
+                <div class="info-grid">
+                    <div class="guild-item"><span class="tag">Target</span><span id="res-name" class="val">-</span></div>
+                    <div class="guild-item"><span class="tag">IP Address</span><span id="res-ip" class="val">0.0.0.0</span></div>
+                    <div class="guild-item"><span class="tag">Device</span><span id="res-dev" class="val">PC</span></div>
                 </div>
-                <div class="target-photo-wrap">
-                    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3R5cXNid2Z6Z3IycXN3bmN3bmN3bmN3bmN3bmN3JmNoYXJzPXo/LMc7wS6I301xS65j9I/giphy.gif">
-                    <div id="overlay-name" class="target-name-overlay">ZODIAC</div>
+                <div class="photo-wrap">
+                    <img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif">
+                    <div id="img-name" class="name-on-photo">ZODIAC</div>
                 </div>
             </div>
         </div>
 
         <footer>
-            <div id="serverTime" style="color:red; font-weight:bold; font-size:18px;">TR/İST: 28.12.2025</div>
-            <div style="color:#444; font-size:11px; margin-top: 10px; letter-spacing: 3px;">ZODIAC MONITORING v8.5 // CELLAT STABLE</div>
+            <div id="serverTime" style="color:red; font-weight:bold; font-size:16px; margin-bottom:10px;">TR/İST: 2026</div>
+            <div>© 2026 ZODIAC. Tüm hakları saklıdır.</div>
+            <div style="font-size:10px; margin-top:5px;">ZODIAC WEB MONITOR v9.0 // CELLAT STABLE</div>
         </footer>
     </div>
 
     <div id="admin-panel">
-        <div class="p-header" id="p-header">
-            <span>ZODIAC SQL MONITOR</span>
+        <div class="p-header" id="p-drag">
+            <span>ZODIAC COMMAND CENTER</span>
             <span onclick="document.getElementById('admin-panel').style.display='none'" style="cursor:pointer;">[X]</span>
         </div>
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('muhurler', this)">MÜHÜRLER</button>
-            <button class="tab-btn" onclick="switchTab('ziyaretciler', this)">ZİYARETÇİLER</button>
-            <button class="tab-btn" onclick="switchTab('ban_listesi', this)">BAN LİSTESİ</button>
+        <div class="p-tabs">
+            <button class="t-btn active" onclick="loadData('muhurler', this)">MÜHÜRLER</button>
+            <button class="t-btn" onclick="loadData('ziyaretciler', this)">ZİYARETÇİLER</button>
+            <button class="t-btn" onclick="loadData('ban_listesi', this)">BAN LİSTESİ</button>
         </div>
-        <div id="logBox" class="log-box">Veriler bekleniyor...</div>
+        <div id="p-body" class="p-content">Veri bekleniyor...</div>
     </div>
 
     <script>
-        const SB_URL = "https://drgrjsbfnjlrcezlbpkv.rest/v1"; // Linklerin doğruluğunu kontrol et
-        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."; // Kendi key'ini buraya koyarsın
+        const SB_URL = "https://drgrjsbfnjlrcezlbpkv.supabase.co/rest/v1";
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRyZ3Jqc2JmbmpscmNlemxicGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5MjQzNjcsImV4cCI6MjA4MjUwMDM2N30.DvA0k3Rund7l5oeqrrG-OuYYnDg75MemDGjKlyO_0Zo";
         let keys = {};
 
-        // SÜRÜKLEME SİSTEMİ
-        const p = document.getElementById("admin-panel");
-        const h = document.getElementById("p-header");
-        let isDrag = false, offset = [0,0];
-        h.onmousedown = (e) => { isDrag = true; offset = [p.offsetLeft - e.clientX, p.offsetTop - e.clientY]; };
-        document.onmousemove = (e) => { if(isDrag) { p.style.left = (e.clientX + offset[0]) + "px"; p.style.top = (e.clientY + offset[1]) + "px"; } };
-        document.onmouseup = () => isDrag = false;
+        // SÜRÜKLEME (Drag) FONKSİYONU
+        const panel = document.getElementById("admin-panel");
+        const header = document.getElementById("p-drag");
+        let active = false, currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
 
-        function getOS() {
+        header.onmousedown = (e) => {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+            if (e.target === header) active = true;
+        };
+        document.onmousemove = (e) => {
+            if (active) {
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+                xOffset = currentX;
+                yOffset = currentY;
+                panel.style.transform = `translate(${currentX}px, ${currentY}px)`;
+            }
+        };
+        document.onmouseup = () => active = false;
+
+        function getDevice() {
             const ua = navigator.userAgent;
             if (/android/i.test(ua)) return "ANDROID";
-            if (/iPad|iPhone|iPod/.test(ua)) return "IOS";
+            if (/iPhone|iPad/i.test(ua)) return "IOS";
             return "PC";
         }
 
         async function saveMuhur() {
-            const name = document.getElementById('nameIn').value;
+            const name = document.getElementById('nameInput').value;
             if(!name) return;
-            const ipFetch = await fetch('https://api.ipify.org?format=json');
-            const ipData = await ipFetch.json();
-            const os = getOS();
+            const resIP = await fetch('https://api.ipify.org?format=json');
+            const {ip} = await resIP.json();
+            const dev = getDevice();
 
-            // Alt panel güncelleme ve gösterim
+            await fetch(`${SB_URL}/muhurler`, {
+                method: 'POST',
+                headers: {'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json'},
+                body: JSON.stringify({isim: name, ip: ip, device: dev})
+            });
+
             document.getElementById('res-name').innerText = name;
-            document.getElementById('res-ip').innerText = ipData.ip;
-            document.getElementById('res-dev').innerText = os;
-            document.getElementById('overlay-name').innerText = name;
-            document.getElementById('result-display').style.display = 'block';
-            document.getElementById('nameIn').value = "";
-            alert("Sistem: " + name + " başarıyla mühürlendi.");
+            document.getElementById('res-ip').innerText = ip;
+            document.getElementById('res-dev').innerText = dev;
+            document.getElementById('img-name').innerText = name.toUpperCase(); // FOTO ÜSTÜ İSİM
+            document.getElementById('result-panel').style.display = 'block';
+            document.getElementById('nameInput').value = "";
         }
 
-        // L11 + 1515
         function checkKeys(e) {
             keys[e.key.toLowerCase()] = true;
             if(keys['l'] && keys['1']) {
-                if(prompt("SECURE ACCESS\nPassword:") === "1515") { p.style.display = 'flex'; }
+                if(prompt("PASSWORD:") === "1515") {
+                    panel.style.display = 'flex';
+                    loadData('muhurler', document.querySelector('.t-btn'));
+                }
                 keys = {};
             }
         }
         window.onkeyup = (e) => keys[e.key.toLowerCase()] = false;
 
-        async function fetchData(table) {
-            const box = document.getElementById('logBox');
-            box.innerHTML = "> Sorgulanıyor...";
-            // Burada gerçek Supabase fetch kodun çalışacak
-            box.innerHTML = `<div class="data-row"><div class="data-content"><span style="color:white;">> Örnek Kayıt</span><span class="tag-red">192.168.1.1</span><span class="tag-red">PC</span></div><button style="color:red; background:none; border:1px solid red; font-size:9px; cursor:pointer;">BANLA</button></div>`;
-        }
-
-        function switchTab(t, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        async function loadData(table, btn) {
+            document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            fetchData(t);
+            const box = document.getElementById('p-body');
+            box.innerHTML = "> Sorgulanıyor...";
+            const res = await fetch(`${SB_URL}/${table}?select=*&order=id.desc`, {headers: {'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`}});
+            const data = await res.json();
+            box.innerHTML = data.map(i => `
+                <div class="data-row">
+                    <div>
+                        <span style="color:white;">> ${table==='ban_listesi'?i.ip:(i.isim||i.ip)}</span>
+                        <span class="data-meta">[${i.ip}] [${i.device || 'PC'}]</span>
+                    </div>
+                    <button style="color:red; background:none; border:1px solid red; font-size:9px; cursor:pointer;">BAN</button>
+                </div>
+            `).join('');
         }
 
         setInterval(() => {
