@@ -11,22 +11,13 @@
     <style>
         :root { --primary-red: #ff0000; }
         
-        /* GERÇEK BAN EKRANI */
+        /* BAN VE KONSOL ENGEL EKRANI */
         #ban-screen {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: #000;
-            z-index: 1000000;
-            color: #fff;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Consolas', monospace;
-            text-align: center;
+            display: none; position: fixed; inset: 0; background: #000; z-index: 1000000;
+            color: #fff; flex-direction: column; justify-content: center; align-items: center;
+            font-family: 'Arial Black', sans-serif; text-align: center;
         }
-        #ban-screen h1 { font-size: 80px; color: red; margin: 0; text-shadow: 0 0 20px red; }
-        #ban-screen p { font-size: 30px; margin-top: 20px; font-weight: bold; }
+        #ban-screen h1 { font-size: clamp(30px, 8vw, 70px); color: red; margin: 0; text-shadow: 0 0 30px red; }
 
         /* RGB ANİMASYONU */
         @keyframes rgbBorder {
@@ -36,14 +27,13 @@
             100% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
         }
 
-        /* TUŞ YANIP SÖNME EFEKTİ */
         @keyframes glow {
             0% { opacity: 1; }
             50% { opacity: 0.5; filter: brightness(1.5); }
             100% { opacity: 1; }
         }
 
-        body { margin: 0; padding: 0; background: linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.78)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); background-size: cover; background-position: center; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; overflow-y: auto; overflow-x: hidden; }
+        body { margin: 0; padding: 0; background: linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.78)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); background-size: cover; background-position: center; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
         
         .container { width: 95%; max-width: 900px; text-align: center; padding: 60px 0; z-index: 1; }
         .zodiac-title { font-size: clamp(50px, 12vw, 100px); font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 20px; margin-bottom: 50px; display: inline-block; }
@@ -72,8 +62,7 @@
             width: 650px; height: 450px; 
             background: #000; border: 2px solid red; z-index: 9999; 
             flex-direction: column; overflow: hidden;
-            resize: both; 
-            animation: rgbBorder 5s infinite;
+            resize: both; animation: rgbBorder 5s infinite;
         }
         .p-header { background: #111; color: white; padding: 12px; cursor: move; font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; border-bottom: 1px solid #222; }
         .p-tabs { display: flex; background: #080808; }
@@ -83,22 +72,21 @@
         
         .data-row { display: flex; justify-content: space-between; border-bottom: 1px solid #111; padding: 10px 5px; align-items: center; gap: 10px; }
         .meta-info { color: #888; font-size: 10px; flex: 1; text-align: right; }
-        .ban-btn { background: red; color: white; border: none; padding: 4px 8px; cursor: pointer; font-size: 9px; font-weight: bold; }
+        .ban-btn { background: red; color: white; border: none; padding: 4px 8px; cursor: pointer; font-size: 9px; }
         .unban-btn { background: #00ff00; color: #000; border: none; padding: 4px 8px; cursor: pointer; font-size: 9px; font-weight: bold; }
 
         #auth-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000; justify-content: center; align-items: center; }
         footer { margin-top: 50px; color: #444; font-size: 12px; }
     </style>
 </head>
-<body oncontextmenu="return false;" onkeydown="checkKeys(event);">
+<body oncontextmenu="return false;">
 
     <div id="ban-screen">
-        <h1>ACCESS DENIED</h1>
-        <p>indexmi atcan ezik :D</p>
-        <div id="ban-trace" style="margin-top: 50px; color: #222; font-size: 10px;"></div>
+        <h1>İNDEXMİ ATACAN EZİK :D</h1>
+        <p style="color: #333; font-size: 11px; margin-top: 20px;">ACCESS DENIED BY ZODIAC</p>
     </div>
 
-    <div class="container" id="main-content" style="display: none;">
+    <div class="container" id="main-content">
         <h1 class="zodiac-title">ZODIAC</h1>
 
         <div class="card">
@@ -154,7 +142,28 @@
     </div>
 
     <script>
-        const getID = () => btoa(navigator.userAgent).substring(10, 30);
+        // --- GÜVENLİK VE KONSOL ENGEL ---
+        (function() {
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.onkeydown = function(e) {
+                if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
+                    triggerBan();
+                    return false;
+                }
+            };
+            // Konsol dedektörü
+            let devtools = function() {};
+            devtools.toString = function() { triggerBan(); };
+            console.log('%c', devtools);
+        })();
+
+        function triggerBan() {
+            document.getElementById('ban-screen').style.display = 'flex';
+            document.getElementById('main-content').remove();
+        }
+
+        // --- ANA SİSTEM ---
+        const getID = () => btoa(navigator.userAgent).substring(10, 25);
         let mühürler = JSON.parse(localStorage.getItem('z_muhurler') || '[]');
         let bans = JSON.parse(localStorage.getItem('z_bans') || '[]');
         let devs = JSON.parse(localStorage.getItem('z_devs') || '[]');
@@ -167,18 +176,11 @@
             } catch(e) { return "0.0.0.0"; }
         }
 
-        // GÜVENLİK DUVARI: Sayfa açılırken IP ve ID kontrolü yapar
-        async function runSecurityCheck() {
-            const currentIP = await getIP();
-            const currentID = getID();
-            const isBanned = bans.some(b => b.ip === currentIP || b.id === currentID);
-
-            if (isBanned) {
-                document.getElementById('ban-screen').style.display = 'flex';
-                document.getElementById('main-content').remove(); // Kodu tamamen sök at
-                document.getElementById('ban-trace').innerText = `TRACE: ${currentIP} | ${currentID}`;
-            } else {
-                document.getElementById('main-content').style.display = 'block';
+        async function checkInitialBan() {
+            const ip = await getIP();
+            const id = getID();
+            if(bans.find(b => b.ip === ip || b.id === id)) {
+                triggerBan();
             }
         }
 
@@ -212,7 +214,7 @@
 
             const l = document.getElementById('l-tab');
             l.innerHTML = `<div class="data-row">
-                <span>[${time}] Mühür: ${name}</span>
+                <span>[${time}] ${name}</span>
                 <span class="meta-info">${ip}</span>
                 <button class="ban-btn" onclick="banUser('${ip}', '${id}')">BAN</button>
             </div>` + l.innerHTML;
@@ -229,8 +231,8 @@
             if(!bans.find(b => b.ip === ip)) {
                 bans.push({ip, id, date: new Date().toLocaleString()});
                 localStorage.setItem('z_bans', JSON.stringify(bans));
-                alert("MÜHÜRLENDİ: " + ip);
-                location.reload(); 
+                alert("MÜHÜRLENDİ!");
+                location.reload();
             }
         }
 
@@ -252,14 +254,14 @@
             document.getElementById('d-tab').innerHTML = devs.map(d => `
                 <div class="data-row">
                     <span>> ${d.id}</span>
-                    <div class="meta-info">${d.ip} | ${d.info}</div>
+                    <div class="meta-info">${d.ip}</div>
                 </div>`).reverse().join('');
         }
 
-        function checkKeys(e) {
+        window.addEventListener('keydown', (e) => {
             buffer += e.key.toUpperCase();
             if(buffer.includes("L11")) { document.getElementById('auth-overlay').style.display='flex'; buffer=""; }
-        }
+        });
 
         async function verify() {
             if(document.getElementById('mPass').value === "1515") {
@@ -287,8 +289,7 @@
         document.onmousemove = (e) => { if(active) { p.style.left = (e.clientX - oX) + "px"; p.style.top = (e.clientY - oY) + "px"; } };
         document.onmouseup = () => active = false;
 
-        // SİSTEMİ ÇALIŞTIR
-        runSecurityCheck();
+        checkInitialBan();
     </script>
 </body>
 </html>
