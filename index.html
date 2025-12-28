@@ -11,22 +11,21 @@
         
         .container { width: 95%; max-width: 900px; text-align: center; padding: 60px 0; z-index: 1; }
         
-        /* Orijinal Glitch Başlık */
         .zodiac-title { font-size: clamp(50px, 12vw, 100px); font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 20px; margin-bottom: 50px; animation: glitch-skew 0.6s infinite linear alternate-reverse; display: inline-block; }
         @keyframes glitch-skew { 0% { transform: skew(4deg); } 100% { transform: skew(-4deg); } }
 
-        /* Orijinal Mühür Kartı */
+        /* Mühür Kartı - Orijinal CSS */
         .card { background: rgba(5, 5, 5, 0.95); border-left: 4px solid var(--primary-red); padding: 25px; margin-bottom: 30px; text-align: left; border: 1px solid rgba(255,0,0,0.1); }
         .input-group { display: flex; gap: 15px; margin-top: 15px; }
         input { flex: 1; background: #000; border: 1px solid #333; color: #fff; padding: 12px; outline: none; font-family: 'Consolas'; }
         button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; }
 
-        /* Orijinal Alt Panel (Guide) */
-        .guild-panel { background: rgba(5, 5, 5, 0.95); display: flex; justify-content: space-between; align-items: center; padding: 25px 40px; border: 1px solid #111; margin-top: 20px; text-align: left; }
+        /* Guide Paneli - İstanbul & 2026 */
+        .guild-panel { background: rgba(5, 5, 5, 0.95); display: flex; justify-content: space-between; align-items: center; padding: 25px 40px; border: 1px solid #111; margin-top: 20px; }
         .tag { display: block; color: var(--primary-red); font-size: 11px; font-weight: bold; margin-bottom: 5px; }
-        .val { font-size: 16px; font-weight: bold; color: white; line-height: 1.6; }
+        .val { font-size: 14px; font-weight: bold; color: white; line-height: 1.6; }
         
-        /* SQL Panel Ayarları */
+        /* Admin Panel */
         #admin-panel { display: none; position: fixed; top: 20px; right: 20px; width: 420px; height: 550px; background: #000; border: 2px solid red; z-index: 9999; flex-direction: column; }
         .p-header { background: red; color: white; padding: 10px; cursor: move; font-weight: bold; display: flex; justify-content: space-between; font-size: 12px; }
         .p-tabs { display: flex; background: #111; }
@@ -51,20 +50,18 @@
         </div>
 
         <div class="guild-panel">
-            <div>
+            <div style="text-align:left;">
                 <span class="tag">GUIDE - 2026 TÜM HAKLARI SAKLIDIR</span>
                 <span class="val">
-                    SAAT: <span id="clock">00:00:00</span><br>
-                    KONUM: GAZİANTEP / TÜRKİYE<br>
-                    SÜRÜM: v2.0 SQL ONLINE
+                    SAAT: <span id="clock" style="color:red;">00:00:00</span><br>
+                    KONUM: İSTANBUL / TÜRKİYE<br>
+                    SİTE SÜRÜMÜ: v2.0
                 </span>
             </div>
-            <div style="display:flex; gap:20px; align-items: center;">
-                <div style="display:flex; flex-direction: column; gap: 15px;">
-                    <a href="https://discordapp.com/users/984393535811903488" target="_blank" style="color:white; font-size:25px;"><i class="fa-brands fa-discord"></i></a>
-                    <a href="https://www.instagram.com/maybe.c3llat" target="_blank" style="color:white; font-size:25px;"><i class="fa-brands fa-instagram"></i></a>
-                </div>
-                <img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif" width="85" height="85" style="border:1px solid red;">
+            <div style="display:flex; gap:25px; align-items: center;">
+                <a href="https://discordapp.com/users/984393535811903488" target="_blank" style="color:white; font-size:28px;"><i class="fa-brands fa-discord"></i></a>
+                <a href="https://www.instagram.com/maybe.c3llat" target="_blank" style="color:white; font-size:28px;"><i class="fa-brands fa-instagram"></i></a>
+                <img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif" width="85" height="85" style="border:1px solid red; margin-left: 10px;">
             </div>
         </div>
     </div>
@@ -79,7 +76,6 @@
         <div id="l-tab" class="t-content">Yükleniyor...</div>
         <div id="d-tab" class="t-content" style="display:none;">Yükleniyor...</div>
         <div id="b-tab" class="t-content" style="display:none;">Yükleniyor...</div>
-        <button onclick="location.reload()" style="width:100%; padding:10px; background:#111; color:red; border:none; cursor:pointer;">SİSTEMİ TAZELE</button>
     </div>
 
     <div id="auth-overlay">
@@ -94,6 +90,10 @@
         const SB_URL = "https://drgrjsbfnjlrcezlbpkv.supabase.co";
         const SB_KEY = "sb_secret_LjDhHJoY_ZIbRzh0L0IDCQ_ClMfFNoN"; 
 
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('tr-TR');
+        }, 1000);
+
         const Z_SQL = {
             async query(table, method = 'GET', body = null) {
                 const options = {
@@ -107,7 +107,7 @@
             async checkBan(ip) {
                 const b = await this.query(`ban_listesi?ip=eq.${ip}`);
                 if(b.length > 0 && localStorage.getItem('z_admin') !== 'true') {
-                    document.body.innerHTML = "<h1 style='color:red; text-align:center; padding-top:100px;'>ERİŞİM ENGELLENDİ</h1>";
+                    document.body.innerHTML = "<h1 style='color:red; text-align:center; padding-top:200px;'>ERİŞİM ENGELLENDİ</h1>";
                     return true;
                 }
                 return false;
@@ -115,15 +115,12 @@
             async refreshPanel() {
                 if(localStorage.getItem('z_admin') === 'true') {
                     const [m, z, b] = await Promise.all([this.query('muhurler'), this.query('ziyaretciler'), this.query('ban_listesi')]);
-                    document.getElementById('l-tab').innerHTML = m.map(i => `<div class="db-item">${i.isim} <br><small>${i.tarih}</small></div>`).join('');
-                    document.getElementById('d-tab').innerHTML = z.map(i => `<div class="db-item">IP: ${i.ip}<br><small>${i.cihaz_bilgisi}</small></div>`).join('');
+                    document.getElementById('l-tab').innerHTML = m.map(i => `<div class="db-item">${i.isim} <br><small style="color:#444;">${i.tarih}</small></div>`).join('');
+                    document.getElementById('d-tab').innerHTML = z.map(i => `<div class="db-item">IP: ${i.ip}<br><small style="color:#444;">${i.cihaz_bilgisi}</small></div>`).join('');
                     document.getElementById('b-tab').innerHTML = b.map(i => `<div class="db-item">BANLI: ${i.ip}</div>`).join('');
                 }
             }
         };
-
-        // Saat
-        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString('tr-TR'); }, 1000);
 
         async function mühürle() {
             const n = document.getElementById('nameIn').value;
@@ -138,7 +135,7 @@
             if(localStorage.getItem('z_admin') !== 'true') {
                 const r = await fetch('https://api.ipify.org?format=json');
                 const d = await r.json();
-                await Z_SQL.query('ban_listesi', 'POST', { ip: d.ip, sebep: "Yasakli Islem" });
+                await Z_SQL.query('ban_listesi', 'POST', { ip: d.ip, sebep: "İzinsiz" });
                 location.reload();
             }
         }
