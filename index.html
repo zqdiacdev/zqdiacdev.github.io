@@ -3,177 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZODIAC & CELLAT | 2026 HATIRA</title>
+    <title>ZODIAC & CELLAT | 2026</title>
     <link rel="icon" type="image/x-icon" href="indir (1).jfif">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary-red: #ff0000; }
-        body { margin: 0; padding: 0; background: linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.78)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); background-size: cover; background-position: center; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; overflow-y: auto; overflow-x: hidden; }
-        .container { width: 95%; max-width: 900px; text-align: center; padding: 60px 0; z-index: 1; }
-        .zodiac-title { font-size: clamp(50px, 12vw, 100px); font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 20px; margin-bottom: 50px; animation: glitch-skew 0.6s infinite linear alternate-reverse; display: inline-block; }
-        .card { background: rgba(5, 5, 5, 0.9); border: 1px solid rgba(255, 0, 0, 0.2); border-left: 4px solid var(--primary-red); padding: 25px; margin-bottom: 30px; backdrop-filter: blur(10px); text-align: left; }
+        body { margin: 0; padding: 0; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); background-size: cover; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
+        .container { width: 95%; max-width: 900px; text-align: center; padding: 60px 0; }
+        .zodiac-title { font-size: clamp(50px, 12vw, 100px); font-weight: 900; letter-spacing: 20px; animation: glitch 0.6s infinite alternate; }
+        .card { background: rgba(5, 5, 5, 0.95); border-left: 4px solid var(--primary-red); padding: 25px; margin-bottom: 30px; text-align: left; border: 1px solid #222; border-left: 4px solid red; }
         .input-group { display: flex; gap: 15px; margin-top: 15px; }
-        input { flex: 1; background: rgba(0, 0, 0, 0.8); border: 1px solid #333; color: #fff; padding: 12px; outline: none; }
+        input { flex: 1; background: #000; border: 1px solid #333; color: #fff; padding: 12px; outline: none; }
         button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; }
-        .guild-panel { background: rgba(5, 5, 5, 0.95); border: 1px solid rgba(255, 255, 255, 0.05); display: flex; justify-content: space-between; align-items: center; padding: 25px 40px; border-radius: 4px; margin-top: 20px; }
-        .val { font-size: 18px; font-weight: bold; color: #fff; }
-        .tag { display: block; color: var(--primary-red); font-size: 11px; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
         
-        /* ADMIN PANEL */
-        #admin-panel { display: none; position: fixed; top: 20px; right: 20px; width: 380px; height: 480px; background: #000; border: 2px solid red; z-index: 9999; flex-direction: column; box-shadow: 0 0 40px #000; }
-        .p-header { background: red; color: white; padding: 10px; cursor: move; font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; }
-        .p-tabs { display: flex; background: #111; }
-        .t-btn { flex: 1; padding: 12px; border: none; background: transparent; color: #555; font-size: 10px; cursor: pointer; font-weight: bold; }
-        .t-btn.active { color: red; background: #080808; border-bottom: 2px solid red; }
-        .t-content { flex: 1; display: none; overflow-y: auto; padding: 15px; color: #0f0; font-size: 11px; background: #050505; }
-        .t-content.active { display: block; }
-        #auth-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000; justify-content: center; align-items: center; }
+        /* ADMIN PANEL - ÖZEL TASARIM */
+        #admin-panel { display: none; position: fixed; top: 20px; right: 20px; width: 380px; height: 480px; background: #000; border: 2px solid red; z-index: 9999; flex-direction: column; box-shadow: 0 0 50px #000; }
+        .p-header { background: red; color: white; padding: 10px; cursor: move; font-weight: bold; display: flex; justify-content: space-between; font-size: 12px; }
+        .t-content { flex: 1; overflow-y: auto; padding: 15px; color: #0f0; font-size: 11px; background: #050505; }
+        #auth-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.99); z-index: 10000; justify-content: center; align-items: center; }
         
-        footer { margin-top: 50px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px; font-size: 13px; color: #888; padding-bottom: 40px; }
+        .guild-panel { background: rgba(10, 10, 10, 0.9); padding: 25px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; margin-top: 20px; }
     </style>
 </head>
-<body oncontextmenu="handleBan(); return false;" onkeydown="keyMonitor(event);">
+<body onkeydown="track(event)">
 
     <div class="container">
         <h1 class="zodiac-title">ZODIAC</h1>
 
         <div class="card">
-            <div style="color: var(--primary-red); font-size: 11px; font-weight: bold;">[SİSTEM AKTİF] - ADINI HATIRA BIRAK</div>
+            <div style="color:red; font-size:11px; font-weight:bold;">[DATABASE] ADINI MÜHÜRLE</div>
             <div class="input-group">
-                <input type="text" id="nameInput" placeholder="Kullanıcı adını mühürle...">
-                <button onclick="saveAndGenerate()">KAYDET</button>
+                <input type="text" id="nameInput" placeholder="Kullanıcı adı...">
+                <button onclick="saveAndLog()">MÜHÜRLE</button>
             </div>
         </div>
 
-        <div id="memory-display" style="display:none; margin-bottom: 30px;"><canvas id="memoryCanvas" style="width:100%; border: 2px solid var(--primary-red);"></canvas></div>
+        <div id="memory-display" style="display:none;"><canvas id="memoryCanvas" style="width:100%; border:2px solid red; margin-bottom:20px;"></canvas></div>
 
         <div class="guild-panel">
-            <div style="display:flex; gap:40px;">
-                <div><span class="tag">Owner</span><span class="val">Zodiac</span></div>
-                <div><span class="tag">Founder</span><span class="val">Cellat</span></div>
+            <div style="text-align:left;">
+                <span style="color:red; font-size:10px; display:block;">OWNER</span>
+                <span style="font-size:18px; font-weight:bold;">ZODIAC & CELLAT</span>
             </div>
             <div style="display:flex; gap:20px;">
                 <a href="https://discordapp.com/users/984393535811903488" target="_blank" style="color:white; font-size:30px;"><i class="fab fa-discord"></i></a>
                 <a href="https://www.instagram.com/maybe.c3llat" target="_blank" style="color:white; font-size:30px;"><i class="fab fa-instagram"></i></a>
             </div>
-            <div style="border:2px solid red; padding:2px; line-height:0;"><img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif" width="85" height="85"></div>
+            <img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif" width="80" style="border:1px solid red;">
         </div>
-
-        <footer>
-            <div id="serverTime" style="color: red; font-weight: bold; margin-bottom: 5px;">Yükleniyor...</div>
-            <div>© 2026 ZODIAC. Tüm hakları saklıdır.</div>
-        </footer>
+        
+        <div id="serverTime" style="color:red; margin-top:30px; font-weight:bold;"></div>
     </div>
 
     <div id="admin-panel">
-        <div class="p-header" id="pDraggable"><span>ZODIAC COMMAND</span><span onclick="this.parentElement.parentElement.style.display='none'" style="cursor:pointer;">[X]</span></div>
-        <div class="p-tabs">
-            <button class="t-btn active" onclick="tab(event, 'l-tab')">LOGLAR</button>
-            <button class="t-btn" onclick="tab(event, 'd-tab')">CİHAZLAR</button>
-        </div>
-        <div id="l-tab" class="t-content active"></div>
-        <div id="d-tab" class="t-content"></div>
-        <div style="padding:10px; background:#111;"><button onclick="fullReset()" style="width:100%; padding:8px; color:red; background:#222; border:1px solid red; cursor:pointer;">SYSTEM RESET</button></div>
+        <div class="p-header" id="dragH"><span>SYSTEM TERMINAL</span><span onclick="this.parentElement.parentElement.style.display='none'" style="cursor:pointer;">[X]</span></div>
+        <div id="l-tab" class="t-content"></div>
+        <div style="padding:10px; background:#111;"><button onclick="clearDB()" style="width:100%; padding:5px; color:red; background:none; border:1px solid red; cursor:pointer;">DATABASE RESET</button></div>
     </div>
 
     <div id="auth-overlay">
-        <div style="border: 2px solid red; padding: 40px; background: #000; text-align: center;">
-            <p style="color:red; font-weight:bold;">MASTER KEY</p>
-            <input type="password" id="mPass" style="background:#000; color:#fff; border:1px solid #333; padding:15px; text-align:center; width:220px; outline:none; margin: 20px 0;">
-            <button onclick="verify()" style="background:red; color:#fff; border:none; padding:12px; cursor:pointer; width:100%;">ENTER</button>
+        <div style="border:2px solid red; padding:40px; background:#000; text-align:center;">
+            <p style="color:red; margin-bottom:20px;">ACCESS KEY REQUIRED</p>
+            <input type="password" id="pw" style="background:#000; color:#fff; border:1px solid #333; padding:10px; text-align:center;"><br><br>
+            <button onclick="login()" style="width:100%;">AUTHENTICATE</button>
         </div>
     </div>
 
     <script>
         // --- HAFIZA MOTORU ---
-        const Z_CORE = {
-            get: (key) => JSON.parse(localStorage.getItem(key) || '[]'),
-            set: (key, val) => localStorage.setItem(key, JSON.stringify(val))
+        const ZODIAC_STORAGE = {
+            add: (msg) => {
+                let logs = JSON.parse(localStorage.getItem('z_logs') || '[]');
+                logs.unshift(`[${new Date().toLocaleTimeString()}] ${msg}`);
+                localStorage.setItem('z_logs', JSON.stringify(logs.slice(0, 50)));
+                ZODIAC_STORAGE.render();
+            },
+            render: () => {
+                const box = document.getElementById('l-tab');
+                const data = JSON.parse(localStorage.getItem('z_logs') || '[]');
+                box.innerHTML = data.length ? data.map(l => `<div>${l}</div>`).join('') : "Kayıt yok.";
+            }
         };
 
-        let buffer = "";
-
-        function addLog(m) {
-            let logs = Z_CORE.get('z_logs');
-            logs.unshift(`[${new Date().toLocaleTimeString()}] ${m}`);
-            Z_CORE.set('z_logs', logs.slice(0, 50));
-            renderLogs();
-        }
-
-        function renderLogs() {
-            const container = document.getElementById('l-tab');
-            if(container) container.innerHTML = Z_CORE.get('z_logs').map(l => `<div>${l}</div>`).join('');
-        }
-
-        function saveAndGenerate() {
-            const n = document.getElementById('nameInput').value;
-            if(!n) return;
-            
-            // Görsel Mühür
-            const c = document.getElementById('memoryCanvas');
-            const ctx = c.getContext('2d');
-            c.width = 800; c.height = 150;
-            ctx.fillStyle="#000"; ctx.fillRect(0,0,800,150);
-            ctx.fillStyle="#fff"; ctx.font="bold 30px Courier New"; ctx.textAlign="center";
-            ctx.fillText(n.toUpperCase(), 400, 80);
-            document.getElementById('memory-display').style.display="block";
-
-            // Hafızaya Kaydet
-            addLog("Mühür Kaydedildi: " + n);
+        function saveAndLog() {
+            const val = document.getElementById('nameInput').value;
+            if(!val) return;
+            ZODIAC_STORAGE.add("Mühür: " + val);
+            alert("Veri kaydedildi!");
             document.getElementById('nameInput').value = "";
         }
 
-        function verify() {
-            if(document.getElementById('mPass').value === "1515") {
-                localStorage.setItem('z_admin_auth', 'true');
+        function login() {
+            if(document.getElementById('pw').value === "1515") {
+                localStorage.setItem('z_admin_login', 'true');
                 location.reload();
             }
         }
 
-        function keyMonitor(e) {
-            buffer += e.key.toUpperCase();
-            if(buffer.includes("L11")) { document.getElementById('auth-overlay').style.display='flex'; buffer=""; }
-            if(e.keyCode === 123 && localStorage.getItem('z_admin_auth') !== 'true') {
-                localStorage.setItem('z_is_banned', 'true');
-                location.reload();
-            }
-        }
-
-        function handleBan() {
-            if(localStorage.getItem('z_admin_auth') !== 'true') {
-                document.body.innerHTML = "<h1 style='color:red; text-align:center; margin-top:20%'>ACCESS DENIED - BANNED</h1>";
-            }
-        }
-
-        function tab(evt, id) {
-            document.querySelectorAll(".t-content").forEach(c => c.style.display = "none");
-            document.querySelectorAll(".t-btn").forEach(b => b.classList.remove("active"));
-            document.getElementById(id).style.display = "block";
-            evt.currentTarget.classList.add("active");
-        }
-
-        function fullReset() {
-            if(confirm("Tüm kayıtlar silinsin mi?")) {
+        function clearDB() {
+            if(confirm("Tüm veriler silinsin mi?")) {
                 localStorage.clear();
                 location.reload();
             }
         }
 
+        let buffer = "";
+        function track(e) {
+            buffer += e.key.toUpperCase();
+            if(buffer.includes("L11")) { document.getElementById('auth-overlay').style.display='flex'; buffer=""; }
+        }
+
         window.onload = () => {
-            renderLogs();
-            if(localStorage.getItem('z_is_banned') === 'true' && localStorage.getItem('z_admin_auth') !== 'true') handleBan();
-            if(localStorage.getItem('z_admin_auth') === 'true') {
+            ZODIAC_STORAGE.render();
+            if(localStorage.getItem('z_admin_login') === 'true') {
                 document.getElementById('admin-panel').style.display = 'flex';
             }
             setInterval(() => {
                 const d = new Date();
-                document.getElementById('serverTime').innerText = `TR/İST: ${d.toLocaleDateString('tr-TR').replace(/\d{4}$/,'2026')} ${d.toLocaleTimeString('tr-TR')}`;
+                document.getElementById('serverTime').innerText = `TR/IST: ${d.toLocaleTimeString()}`;
             }, 1000);
         };
 
-        // Sürükleme
+        // Panel Sürükleme
         const p = document.getElementById('admin-panel');
-        const h = document.getElementById('pDraggable');
+        const h = document.getElementById('dragH');
         h.onmousedown = (e) => {
             let ox = e.clientX - p.offsetLeft;
             let oy = e.clientY - p.offsetTop;
