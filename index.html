@@ -9,44 +9,59 @@
     <style>
         :root { --primary-red: #ff0000; }
         #ban-screen { display: none; position: fixed; inset: 0; background: #000; color: red; z-index: 10000; justify-content: center; align-items: center; flex-direction: column; font-family: 'Consolas'; text-align: center; }
-        body { margin: 0; padding: 0; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); background-size: cover; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; display: flex; justify-content: center; min-height: 100vh; overflow: hidden; }
+        
+        body { 
+            margin: 0; padding: 0; 
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); 
+            background-size: cover; background-attachment: fixed; 
+            color: #eee; font-family: 'Consolas', monospace; 
+            display: flex; justify-content: center; min-height: 100vh; overflow: hidden; 
+        }
+
         .container { width: 95%; max-width: 900px; text-align: center; padding: 60px 0; position: relative; z-index: 1; }
-        .card { background: rgba(5,5,5,0.9); border: 1px solid #111; border-left: 4px solid var(--primary-red); padding: 25px; margin-bottom: 30px; text-align: left; }
+        
+        /* DATABASE KARTI */
+        .card { background: rgba(5,5,5,0.9); border: 1px solid #111; border-left: 4px solid var(--primary-red); padding: 25px; margin-bottom: 20px; text-align: left; }
         .input-group { display: flex; gap: 15px; margin-top: 15px; }
         input { flex: 1; background: #000; border: 1px solid #333; color: #fff; padding: 12px; outline: none; }
         button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { box-shadow: 0 0 15px var(--primary-red); }
 
-        /* GÖRSELDEKİ EKSİK KISIM (GUILD PANEL) */
-        .guild-panel { background: rgba(5,5,5,0.95); border: 1px solid #111; padding: 20px; display: flex; align-items: center; justify-content: space-between; margin-top: 20px; }
-        .info-box { display: flex; gap: 30px; }
-        .info-item { border-left: 2px solid red; padding-left: 15px; text-align: left; }
-        .info-label { color: red; font-size: 10px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
-        .info-value { color: white; font-size: 18px; font-weight: bold; }
-        .social-icons { display: flex; gap: 20px; font-size: 24px; color: white; }
+        /* GÖRSELDEKİ GUILD PANEL (OWNER/FOUNDER) */
+        .guild-panel { 
+            background: rgba(5,5,5,0.95); border: 1px solid #111; 
+            padding: 30px; display: flex; align-items: center; 
+            justify-content: space-between; margin-top: 10px;
+            position: relative;
+        }
+        .info-box { display: flex; gap: 40px; }
+        .info-item { border-left: 3px solid red; padding-left: 20px; text-align: left; }
+        .info-label { color: red; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
+        .info-value { color: white; font-size: 22px; font-weight: bold; letter-spacing: 1px; }
+        
+        .social-icons { display: flex; gap: 25px; font-size: 28px; color: white; margin-left: auto; margin-right: 40px; }
         .social-icons i { cursor: pointer; transition: 0.3s; }
-        .social-icons i:hover { color: red; }
-        .profile-img { width: 80px; height: 80px; border: 1px solid red; padding: 2px; }
+        .social-icons i:hover { color: red; transform: scale(1.1); }
+        
+        .profile-img-container { border: 2px solid red; padding: 3px; line-height: 0; }
+        .profile-img { width: 90px; height: 90px; object-fit: cover; }
 
         footer { margin-top: 50px; }
         .footer-time { color: red; font-weight: bold; margin-bottom: 8px; font-size: 16px; }
-        
-        #admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 550px; height: 600px; background: #000; border: 2px solid red; z-index: 99999; flex-direction: column; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
+
+        /* ADMIN PANEL */
+        #admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 550px; height: 600px; background: #000; border: 2px solid red; z-index: 99999; flex-direction: column; }
         .p-header { background: red; color: white; padding: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; cursor: move; }
         .tabs { display: flex; background: #111; }
-        .tab-btn { flex: 1; padding: 15px; border: none; background: transparent; color: #555; cursor: pointer; font-family: 'Consolas'; font-size: 11px; font-weight: bold; }
+        .tab-btn { flex: 1; padding: 15px; border: none; background: transparent; color: #555; cursor: pointer; font-weight: bold; }
         .tab-btn.active { color: white; background: #050505; border-bottom: 3px solid red; }
         .log-box { flex: 1; overflow-y: auto; padding: 20px; color: #0f0; font-size: 13px; text-align: left; background: #020202; }
-        .ban-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #111; }
-        .unban-btn { color: #0f0; border: 1px solid #0f0; cursor: pointer; font-size: 10px; padding: 3px 8px; }
     </style>
 </head>
-<body>
+<body onkeydown="checkKeys(event)">
 
     <div id="ban-screen">
         <h1 style="font-size: 60px; letter-spacing: 5px;">INDEX Mİ ATCAN EZİK :D</h1>
-        <p id="ban-reason" style="color: #555; margin-top: 10px;"></p>
-        <p style="margin-top: 50px; color: red; letter-spacing: 10px; font-weight: bold;">Z O D I A C</p>
+        <p id="ban-reason" style="color: #555;"></p>
     </div>
 
     <div id="main-content" class="container">
@@ -63,11 +78,11 @@
         <div class="guild-panel">
             <div class="info-box">
                 <div class="info-item">
-                    <div class="info-label">Owner</div>
+                    <div class="info-label">OWNER</div>
                     <div class="info-value">Zodiac</div>
                 </div>
                 <div class="info-item">
-                    <div class="info-label">Founder</div>
+                    <div class="info-label">FOUNDER</div>
                     <div class="info-value">Cellat</div>
                 </div>
             </div>
@@ -77,7 +92,9 @@
                 <i class="fab fa-instagram"></i>
             </div>
 
-            <img src="https://i.ibb.co/v4mYmPq/pirate-flag.gif" class="profile-img" alt="Zodiac">
+            <div class="profile-img-container">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmdndm1reG9icWp5eG9yeHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/LMc7wS6I301xS65j9I/giphy.gif" class="profile-img" alt="Zodiac">
+            </div>
         </div>
 
         <footer>
@@ -89,64 +106,59 @@
 
     <div id="admin-panel">
         <div id="panel-header" class="p-header">
-            <span><i class="fas fa-terminal"></i> ZODIAC SQL TERMINAL</span>
-            <span onclick="closePanel()" style="cursor:pointer; padding: 0 10px;">[X]</span>
+            <span>ZODIAC SQL TERMINAL</span>
+            <span onclick="closePanel()" style="cursor:pointer;">[X]</span>
         </div>
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('muhurler', this)">MÜHÜRLER</button>
             <button class="tab-btn" onclick="switchTab('ziyaretciler', this)">ZİYARETÇİLER</button>
             <button class="tab-btn" onclick="switchTab('ban_listesi', this)">BAN LİSTESİ</button>
         </div>
-        <div id="logBox" class="log-box">Veriler yükleniyor...</div>
+        <div id="logBox" class="log-box">Yükleniyor...</div>
     </div>
 
     <script>
         const SB_URL = "https://drgrjsbfnjlrcezlbpkv.supabase.co/rest/v1";
         const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRyZ3Jqc2JmbmpscmNlemxicGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5MjQzNjcsImV4cCI6MjA4MjUwMDM2N30.DvA0k3Rund7l5oeqrrG-OuYYnDg75MemDGjKlyO_0Zo";
-        let currentTab = 'muhurler', keysPressed = {};
+        let currentTab = 'muhurler', keys = {};
 
         // SÜRÜKLEME
         const panel = document.getElementById("admin-panel");
         const header = document.getElementById("panel-header");
-        let isDragging = false, offX, offY;
+        let isDragging = false, startX, startY;
 
-        header.onmousedown = (e) => { isDragging = true; offX = e.clientX - panel.offsetLeft; offY = e.clientY - panel.offsetTop; panel.style.transform = "none"; };
-        document.onmousemove = (e) => { if (!isDragging) return; panel.style.left = (e.clientX - offX) + "px"; panel.style.top = (e.clientY - offY) + "px"; };
+        header.onmousedown = (e) => { isDragging = true; startX = e.clientX - panel.offsetLeft; startY = e.clientY - panel.offsetTop; panel.style.transform = 'none'; };
+        document.onmousemove = (e) => { if(isDragging) { panel.style.left = (e.clientX - startX) + 'px'; panel.style.top = (e.clientY - startY) + 'px'; } };
         document.onmouseup = () => isDragging = false;
 
-        // L11 + 1515 GİRİŞİ
-        window.addEventListener('keydown', (e) => {
-            keysPressed[e.key.toLowerCase()] = true;
-            if (keysPressed['l'] && keysPressed['1']) {
-                const pass = prompt("ZODIAC SYSTEM\nPassword:");
-                if (pass === "1515") { panel.style.display = 'flex'; fetchData(currentTab); }
-                keysPressed = {};
+        // L11 VE 1515 GİRİŞİ
+        function checkKeys(e) {
+            keys[e.key.toLowerCase()] = true;
+            if(keys['l'] && keys['1']) {
+                const p = prompt("PASSWORD:");
+                if(p === "1515") { panel.style.display = 'flex'; fetchData(currentTab); }
+                keys = {};
             }
-        });
-        window.addEventListener('keyup', (e) => { keysPressed[e.key.toLowerCase()] = false; });
+        }
+        window.onkeyup = (e) => { keys[e.key.toLowerCase()] = false; };
 
         function closePanel() { panel.style.display = 'none'; }
 
-        // DİĞER FONKSİYONLAR (FETCH, SAVE, BAN VS.) AYNI ŞEKİLDE DEVAM EDİYOR...
-        async function fetchData(table) {
+        async function fetchData(t) {
             const box = document.getElementById('logBox');
             try {
-                const res = await fetch(`${SB_URL}/${table}?select=*&order=id.desc`, {headers: {'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`}});
+                const res = await fetch(`${SB_URL}/${t}?select=*&order=id.desc`, {headers: {'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`}});
                 const data = await res.json();
-                box.innerHTML = data.map(i => {
-                    let val = (table === 'muhurler' ? i.isim : i.ip);
-                    let btn = (table === 'ban_listesi') ? `<span class="unban-btn" onclick="unbanUser('${i.ip}')">KALDIR</span>` : `<span style="color:red; cursor:pointer;" onclick="banUser('${val}')">BAN</span>`;
-                    return `<div class="ban-row"><span>> ${val}</span>${btn}</div>`;
-                }).join('');
-            } catch (e) { box.innerHTML = "Hata!"; }
+                box.innerHTML = data.map(i => `<div>> ${t==='muhurler'?i.isim:i.ip}</div>`).join('');
+            } catch(e) { box.innerHTML = "Hata!"; }
         }
 
         async function saveMuhur() {
             const n = document.getElementById('nameIn').value;
             if(!n) return;
-            await fetch(`${SB_URL}/muhurler`, { method: 'POST', headers: {'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json'}, body: JSON.stringify({ isim: n }) });
+            await fetch(`${SB_URL}/muhurler`, {method:'POST', headers:{'apikey':SB_KEY, 'Authorization':`Bearer ${SB_KEY}`, 'Content-Type':'application/json'}, body:JSON.stringify({isim:n})});
             document.getElementById('nameIn').value = "";
-            if(currentTab === 'muhurler') fetchData('muhurler');
+            fetchData('muhurler');
         }
 
         function switchTab(t, b) {
