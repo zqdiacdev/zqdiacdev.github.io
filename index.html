@@ -14,7 +14,6 @@
         #ban-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 1000000; color: #fff; flex-direction: column; justify-content: center; align-items: center; font-family: 'Arial Black', sans-serif; text-align: center; }
         #ban-screen h1 { font-size: clamp(30px, 8vw, 70px); color: red; margin: 0; text-shadow: 0 0 30px red; }
         
-        /* Gelişmiş RGB Border Efekti */
         @keyframes rgbBorder { 
             0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; } 
             33% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; } 
@@ -46,14 +45,13 @@
         .avatar-frame img { width: 85px; height: 85px; object-fit: cover; }
         
         /* Gelişmiş Admin Panel */
-        #admin-panel { display: none; position: fixed; top: 100px; left: 100px; width: 850px; height: 550px; background: #000; border: 2px solid red; z-index: 9999; flex-direction: column; overflow: hidden; resize: both; animation: rgbBorder 5s infinite; }
+        #admin-panel { display: none; position: fixed; top: 100px; left: 100px; width: 900px; height: 550px; background: #000; border: 2px solid red; z-index: 9999; flex-direction: column; overflow: hidden; resize: both; animation: rgbBorder 5s infinite; }
         .p-header { background: #111; color: white; padding: 12px; cursor: move; font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; border-bottom: 1px solid #222; }
         .p-tabs { display: flex; background: #080808; }
         .t-btn { flex: 1; padding: 12px; border: none; background: transparent; color: #555; font-size: 10px; cursor: pointer; font-weight: bold; border-bottom: 2px solid transparent; }
         .t-btn.active { color: white; background: #111; border-bottom: 2px solid red; }
         .t-content { flex: 1; overflow-y: auto; padding: 15px; color: #0f0; font-size: 11px; background: #050505; }
         
-        /* Tablo Stili */
         .data-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
         .data-table th { text-align: left; color: red; border-bottom: 1px solid #333; padding: 10px; font-size: 10px; }
         .data-table td { padding: 10px; border-bottom: 1px solid #111; font-family: 'Courier New'; font-size: 11px; }
@@ -107,24 +105,31 @@
     <div id="admin-panel">
         <div class="p-header" id="pDraggable"><span><i class="fas fa-shield-alt"></i> ZODIAC COMMAND CENTER</span><span onclick="this.parentElement.parentElement.style.display='none'" style="cursor:pointer;">[X]</span></div>
         <div class="p-tabs">
-            <button class="t-btn active" onclick="tab(event, 'l-tab')">MÜHÜRLER (DETAYLI)</button>
+            <button class="t-btn active" onclick="tab(event, 'l-tab')">MÜHÜRLER</button>
+            <button class="t-btn" onclick="tab(event, 'v-tab')">ZİYARETÇİLER (LOGS)</button>
             <button class="t-btn" onclick="tab(event, 'b-tab')">BAN LİSTESİ</button>
         </div>
+        
         <div id="l-tab" class="t-content" style="display:block;">
             <table class="data-table">
                 <thead>
-                    <tr>
-                        <th>Tarih/Saat</th>
-                        <th>İsim</th>
-                        <th>IP Adresi</th>
-                        <th>Cihaz/OS</th>
-                        <th>İşlem</th>
-                    </tr>
+                    <tr><th>Tarih/Saat</th><th>İsim</th><th>IP</th><th>Cihaz</th><th>İşlem</th></tr>
                 </thead>
                 <tbody id="log-body"></tbody>
             </table>
         </div>
+
+        <div id="v-tab" class="t-content" style="display:none;">
+            <table class="data-table">
+                <thead>
+                    <tr><th>Giriş Saati</th><th>IP Adresi</th><th>Cihaz Bilgisi</th><th>Device ID</th></tr>
+                </thead>
+                <tbody id="visitor-body"></tbody>
+            </table>
+        </div>
+
         <div id="b-tab" class="t-content" style="display:none;"></div>
+        
         <div style="padding:10px; background:#111;"><button onclick="systemReset()" style="width:100%; background:#222; color:red; border:none; padding:8px; font-size:9px;">DATABASE RESET</button></div>
     </div>
 
@@ -146,13 +151,7 @@
         let isAdmin = false;
         const getID = () => btoa(navigator.userAgent).substring(10, 25);
 
-        // Tarih/Saat Yardımcısı
-        const getNow = () => {
-            const d = new Date();
-            return d.toLocaleDateString('tr-TR') + " " + d.toLocaleTimeString('tr-TR');
-        };
-
-        // Cihaz Bilgisi Yardımcısı
+        const getNow = () => new Date().toLocaleString('tr-TR');
         const getDevice = () => {
             const ua = navigator.userAgent;
             if (/android/i.test(ua)) return "Android";
@@ -160,6 +159,33 @@
             if (/Windows/i.test(ua)) return "Windows PC";
             return "Unknown";
         };
+
+        // ZİYARETÇİ KAYDI (SİTEYE GİRİLDİĞİNDE TETİKLENİR)
+        async function logVisitor() {
+            if(!_supabase) return;
+            const ip = await getIP();
+            const id = getID();
+            const dev = getDevice() + " (" + navigator.platform + ")";
+            await _supabase.from('ziyaretciler').insert([{ ip, device_id: id, device_info: dev }]);
+            checkSecurity(ip, id);
+        }
+
+        async function getIP() {
+            try {
+                const r = await fetch('https://api.ipify.org?format=json');
+                const d = await r.json(); return d.ip;
+            } catch(e) { return "0.0.0.0"; }
+        }
+
+        async function checkSecurity(ip, id) {
+            if(!_supabase) return;
+            const { data: banData } = await _supabase.from('bans').select('*').or(`ip.eq.${ip},device_id.eq.${id}`);
+            if(banData && banData.length > 0) {
+                document.getElementById('main-content').innerHTML = "";
+                document.getElementById('ban-screen').style.display = 'flex';
+                document.getElementById('ban-details').innerText = `ID: ${id} | IP: ${ip}`;
+            }
+        }
 
         function checkKeys(e) {
             if (e.target.tagName === 'INPUT' && e.target.id !== 'mPass') return;
@@ -172,26 +198,6 @@
             }
         }
 
-        async function getIP() {
-            try {
-                const r = await fetch('https://api.ipify.org?format=json');
-                const d = await r.json(); return d.ip;
-            } catch(e) { return "0.0.0.0"; }
-        }
-
-        async function checkSecurity() {
-            if(!_supabase) return;
-            const ip = await getIP();
-            const id = getID();
-            const { data: banData } = await _supabase.from('bans').select('*').or(`ip.eq.${ip},device_id.eq.${id}`);
-            if(banData && banData.length > 0) {
-                document.getElementById('main-content').innerHTML = "";
-                document.getElementById('ban-screen').style.display = 'flex';
-                document.getElementById('ban-details').innerText = `ID: ${id} | IP: ${ip}`;
-            }
-        }
-        checkSecurity();
-
         async function generateMemory() {
             const nameInput = document.getElementById('nameInput');
             const name = nameInput.value;
@@ -201,12 +207,9 @@
             const dev = getDevice();
 
             if(_supabase) {
-                await _supabase.from('muhurler').insert([{ 
-                    name: name, ip: ip, device_id: id, device_info: dev 
-                }]);
+                await _supabase.from('muhurler').insert([{ name, ip, device_id: id, device_info: dev }]);
             }
 
-            // SİYAH EKRAN ÇIKTISI (Görsel Mühür)
             const c = document.getElementById('memoryCanvas'); 
             const ctx = c.getContext('2d');
             c.width = 800; c.height = 180;
@@ -224,23 +227,31 @@
 
         async function renderLogs() {
             if(!_supabase) return;
-            const { data } = await _supabase.from('muhurler').select('*').order('created_at', { ascending: false });
-            document.getElementById('log-body').innerHTML = data.map(m => {
-                const date = new Date(m.created_at).toLocaleString('tr-TR');
-                return `
+            // Mühürleri Yükle
+            const { data: mData } = await _supabase.from('muhurler').select('*').order('created_at', { ascending: false });
+            document.getElementById('log-body').innerHTML = mData.map(m => `
                 <tr>
-                    <td>${date}</td>
+                    <td>${new Date(m.created_at).toLocaleString('tr-TR')}</td>
                     <td style="color:#fff; font-weight:bold;">${m.name}</td>
                     <td>${m.ip}</td>
-                    <td style="color:#888;">${m.device_info || 'Bilinmiyor'}</td>
+                    <td>${m.device_info}</td>
                     <td><button class="ban-btn" onclick="banProcess('${m.ip}', '${m.device_id}')">BAN</button></td>
-                </tr>`;
-            }).join('');
+                </tr>`).join('');
+
+            // Ziyaretçileri Yükle
+            const { data: vData } = await _supabase.from('ziyaretciler').select('*').order('created_at', { ascending: false }).limit(50);
+            document.getElementById('visitor-body').innerHTML = vData.map(v => `
+                <tr>
+                    <td>${new Date(v.created_at).toLocaleTimeString('tr-TR')}</td>
+                    <td>${v.ip}</td>
+                    <td>${v.device_info}</td>
+                    <td style="color:#444; font-size:9px;">${v.device_id}</td>
+                </tr>`).join('');
         }
 
         async function banProcess(ip, id) {
-            if(confirm("Bu cihazı/IP'yi yasaklamak istediğine emin misin?")) {
-                await _supabase.from('bans').insert([{ ip: ip, device_id: id }]);
+            if(confirm("Yasaklansın mı?")) {
+                await _supabase.from('bans').insert([{ ip, device_id: id }]);
                 renderBans();
             }
         }
@@ -248,9 +259,9 @@
         async function renderBans() {
             const { data } = await _supabase.from('bans').select('*');
             document.getElementById('b-tab').innerHTML = data.map(b => `
-                <div class="data-row">
-                    <div><b>${b.ip}</b> <small>(${b.device_id})</small></div>
-                    <button class="unban-btn" onclick="unbanProcess('${b.id}')">KALDIR</button>
+                <div class="data-row" style="padding:10px; border-bottom:1px solid #222;">
+                    <b>${b.ip}</b> <small>(${b.device_id})</small>
+                    <button class="unban-btn" onclick="unbanProcess('${b.id}')" style="float:right;">KALDIR</button>
                 </div>`).join('');
         }
 
@@ -274,20 +285,21 @@
             document.getElementById(id).style.display = 'block';
             evt.currentTarget.classList.add('active');
             if(id === 'b-tab') renderBans();
+            if(id === 'v-tab' || id === 'l-tab') renderLogs();
         }
 
         setInterval(() => {
-            const d = new Date();
-            document.getElementById('serverTime').innerText = `TR/İST: ${d.toLocaleDateString('tr-TR')} ${d.toLocaleTimeString('tr-TR')}`;
+            document.getElementById('serverTime').innerText = `TR/İST: ${getNow()}`;
         }, 1000);
 
-        // Panel Taşıma
         const p = document.getElementById("admin-panel");
         const dz = document.getElementById("pDraggable");
         let active = false, oX, oY;
         dz.onmousedown = (e) => { active = true; oX = e.clientX - p.offsetLeft; oY = e.clientY - p.offsetTop; };
         document.onmousemove = (e) => { if(active) { p.style.left = (e.clientX - oX) + "px"; p.style.top = (e.clientY - oY) + "px"; } };
         document.onmouseup = () => active = false;
+
+        logVisitor(); // Sayfa yüklendiğinde herkesi kaydetmeye başla.
     </script>
 </body>
 </html>
