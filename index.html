@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZODIAC | ORIGINAL RESTORED</title>
+    <title>ZODIAC | 2026 ARMORED</title>
     
     <link rel="icon" type="image/x-icon" href="indir (1).jfif">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,15 +11,14 @@
     <style>
         :root { --primary-red: #ff0000; }
         
-        /* BAN EKRANI */
-        #ban-screen {
-            display: none; position: fixed; inset: 0; background: #000; z-index: 1000000;
-            color: #fff; flex-direction: column; justify-content: center; align-items: center;
-            font-family: 'Arial Black', sans-serif; text-align: center;
+        /* BAN EKRANI (TAM KORUMA) */
+        #ban-screen { 
+            display: none; position: fixed; inset: 0; background: #000; z-index: 1000000; 
+            color: #fff; flex-direction: column; justify-content: center; align-items: center; 
+            font-family: 'Arial Black', sans-serif; text-align: center; 
         }
         #ban-screen h1 { font-size: clamp(30px, 8vw, 70px); color: red; margin: 0; text-shadow: 0 0 30px red; }
 
-        /* RGB ANİMASYONU (SADECE ADMİN PANELİ İÇİN) */
         @keyframes rgbBorder {
             0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
             33% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; }
@@ -27,13 +26,13 @@
             100% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
         }
 
-        body { 
-            margin: 0; padding: 0; 
-            background: linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.78)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); 
-            background-size: cover; background-position: center; background-attachment: fixed; 
-            color: #eee; font-family: 'Consolas', monospace; 
-            display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; 
+        @keyframes glow {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; filter: brightness(1.5); }
+            100% { opacity: 1; }
         }
+
+        body { margin: 0; padding: 0; background: linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.78)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); background-size: cover; background-position: center; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; overflow-y: auto; overflow-x: hidden; }
         
         .container { width: 95%; max-width: 900px; text-align: center; padding: 60px 0; z-index: 1; }
         .zodiac-title { font-size: clamp(50px, 12vw, 100px); font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 20px; margin-bottom: 50px; display: inline-block; }
@@ -42,10 +41,9 @@
         .input-group { display: flex; gap: 15px; margin-top: 15px; }
         input { flex: 1; background: rgba(0, 0, 0, 0.8); border: 1px solid #333; color: #fff; padding: 12px; outline: none; border-radius: 0; }
         
-        button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; transition: 0.2s; height: 45px; }
-        button:hover { filter: brightness(1.2); box-shadow: 0 0 10px red; }
+        button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { animation: glow 0.8s infinite; }
 
-        /* MERKEZİ BİLGİ PANELİ */
         .guild-panel { background: rgba(5, 5, 5, 0.98); border: 1px solid rgba(255, 255, 255, 0.05); display: flex; justify-content: space-between; align-items: center; padding: 25px 40px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 30px; }
         .info-grid { display: flex; gap: 40px; }
         .guild-item { border-left: 3px solid var(--primary-red); padding-left: 18px; text-align: left; }
@@ -54,15 +52,17 @@
         
         .social-links { display: flex; gap: 20px; align-items: center; }
         .social-links a { color: white; font-size: 30px; transition: 0.3s; text-decoration: none; }
-        .social-links a:hover { color: var(--primary-red); transform: translateY(-5px); }
+        .social-links a:hover { color: var(--primary-red); transform: translateY(-5px); filter: drop-shadow(0 0 10px red); }
+        .avatar-frame { border: 2px solid var(--primary-red); padding: 2px; line-height: 0; }
+        .avatar-frame img { width: 85px; height: 85px; object-fit: cover; }
 
-        /* ADMİN PANELİ (Gelişmiş) */
         #admin-panel { 
             display: none; position: fixed; top: 100px; left: 100px; 
             width: 650px; height: 450px; 
             background: #000; border: 2px solid red; z-index: 9999; 
             flex-direction: column; overflow: hidden;
-            resize: both; animation: rgbBorder 5s infinite;
+            resize: both; 
+            animation: rgbBorder 5s infinite;
         }
         .p-header { background: #111; color: white; padding: 12px; cursor: move; font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; border-bottom: 1px solid #222; }
         .p-tabs { display: flex; background: #080808; }
@@ -73,16 +73,18 @@
         .data-row { display: flex; justify-content: space-between; border-bottom: 1px solid #111; padding: 10px 5px; align-items: center; gap: 10px; }
         .meta-info { color: #888; font-size: 10px; flex: 1; text-align: right; }
         .ban-btn { background: red; color: white; border: none; padding: 4px 8px; cursor: pointer; font-size: 9px; }
+        .unban-btn { background: #00ff00; color: #000; border: none; padding: 4px 8px; cursor: pointer; font-size: 9px; font-weight: bold; }
 
         #auth-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000; justify-content: center; align-items: center; }
+        footer { margin-top: 50px; color: #444; font-size: 12px; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;" onkeydown="checkKeys(event);">
 
     <div id="ban-screen">
         <h1>ACCESS DENIED</h1>
-        <p>IP ADRESİNİZ VE CİHAZINIZ KALICI OLARAK ENGELLENMİŞTİR.</p>
-        <span style="font-size: 10px; color: #444;" id="ban-id">ID: 0000</span>
+        <p>SİSTEME ERİŞİMİNİZ KALICI OLARAK ENGELLENMİŞTİR.</p>
+        <div id="ban-details" style="color:red; font-size:10px; margin-top:20px;"></div>
     </div>
 
     <div class="container" id="main-content">
@@ -107,65 +109,122 @@
                     <a href="https://www.instagram.com/maybe.c3llat" target="_blank"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
-            <div style="border: 2px solid var(--primary-red); line-height: 0;">
-                <img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif" style="width: 85px; height: 85px; object-fit: cover;">
+            <div class="avatar-frame">
+                <img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif" alt="PIRATE">
             </div>
         </div>
-    </div>
 
-    <div id="auth-overlay">
-        <div style="border: 2px solid red; padding: 40px; background: #000; text-align: center;">
-            <p style="color:red; font-weight:bold;">MASTER KEY REQUIRED</p>
-            <input type="password" id="mPass" style="background:#000; color:#fff; border:1px solid #444; padding:15px; margin: 20px 0; text-align:center;">
-            <button onclick="verify()">ENTER</button>
-        </div>
+        <footer>
+            <div id="serverTime" style="color: red; font-weight: bold; margin-bottom: 5px;">Yükleniyor...</div>
+            <div>© 2026 ZODIAC. Tüm hakları saklıdır.</div>
+            <div style="font-size:9px; margin-top:5px; color:#222;">ZODIAC v10.0-ARMORED</div>
+        </footer>
     </div>
 
     <div id="admin-panel">
         <div class="p-header" id="pDraggable"><span>ZODIAC COMMAND CENTER</span><span onclick="this.parentElement.parentElement.style.display='none'" style="cursor:pointer;">[X]</span></div>
         <div class="p-tabs">
             <button class="t-btn active" onclick="tab(event, 'l-tab')">MÜHÜRLER</button>
+            <button class="t-btn" onclick="tab(event, 'd-tab')">CİHAZLAR & IP</button>
             <button class="t-btn" onclick="tab(event, 'b-tab')">BAN LİSTESİ</button>
         </div>
         <div id="l-tab" class="t-content" style="display:block;"></div>
+        <div id="d-tab" class="t-content" style="display:none;"></div>
         <div id="b-tab" class="t-content" style="display:none;"></div>
+        <div style="padding:10px; background:#111;"><button onclick="localStorage.clear(); location.reload();" style="width:100%; background:#222; color:red; border:none; padding:8px; font-size:9px;">SYSTEM RESET</button></div>
+    </div>
+
+    <div id="auth-overlay">
+        <div style="border: 2px solid red; padding: 40px; background: #000; text-align: center;">
+            <p style="color:red; font-weight:bold;">MASTER KEY REQUIRED</p>
+            <input type="password" id="mPass" style="background:#000; color:#fff; border:1px solid #444; padding:15px; text-align:center; width:220px; outline:none; margin: 20px 0;">
+            <button onclick="verify()">ENTER</button>
+        </div>
     </div>
 
     <script>
+        // --- TEMEL SİSTEM ---
         const getID = () => btoa(navigator.userAgent).substring(10, 25);
+        let mühürler = JSON.parse(localStorage.getItem('z_muhurler') || '[]');
+        let bans = JSON.parse(localStorage.getItem('z_bans') || '[]');
+        let devs = JSON.parse(localStorage.getItem('z_devs') || '[]');
+        let isAdmin = false;
         let buffer = "";
 
-        // Ban Kontrolü (Yerel)
-        function checkBan() {
-            const bans = JSON.parse(localStorage.getItem('z_bans') || '[]');
-            if(bans.includes(getID())) {
-                document.getElementById('ban-screen').style.display = 'flex';
-                document.getElementById('ban-id').innerText = "DEVICE ID: " + getID();
+        // --- IP VE BAN KONTROLÜ ---
+        async function getIP() {
+            try {
+                const r = await fetch('https://api.ipify.org?format=json');
+                const d = await r.json(); return d.ip;
+            } catch(e) { return "0.0.0.0"; }
+        }
+
+        async function checkSecurity() {
+            const ip = await getIP();
+            const id = getID();
+            if(bans.some(b => b.ip === ip || b.id === id)) {
+                triggerBanScreen(ip, id);
             }
         }
-        checkBan();
+        checkSecurity();
 
-        function triggerBan(targetID) {
-            let bans = JSON.parse(localStorage.getItem('z_bans') || '[]');
-            if(!bans.includes(targetID)) bans.push(targetID);
-            localStorage.setItem('z_bans', JSON.stringify(bans));
+        function triggerBanScreen(ip, id) {
+            document.getElementById('main-content').innerHTML = "";
+            document.getElementById('ban-screen').style.display = 'flex';
+            document.getElementById('ban-details').innerText = `IDENTIFIER: ${ip} | ${id}`;
+            throw "SYSTEM_HALT"; // JS çalışmasını durdur
+        }
+
+        async function forceBan() {
+            if(isAdmin) return;
+            const ip = await getIP();
+            const id = getID();
+            if(!bans.find(b => b.ip === ip)) {
+                bans.push({ip, id, date: new Date().toLocaleString()});
+                localStorage.setItem('z_bans', JSON.stringify(bans));
+            }
             location.reload();
+        }
+
+        // --- F12 DEDEKTÖRÜ (THE TRAP) ---
+        (function() {
+            const detect = () => {
+                const start = new Date();
+                debugger; // Eğer panel açıksa burada takılır
+                if (new Date() - start > 100) forceBan();
+            };
+            setInterval(detect, 1000);
+        })();
+
+        // --- DİĞER FONKSİYONLAR ---
+        function getFullDevice() {
+            const ua = navigator.userAgent;
+            let os = "PC";
+            if (/android/i.test(ua)) os = "Android";
+            else if (/iPhone|iPad/i.test(ua)) os = "iOS";
+            return `${os} (${navigator.platform})`;
+        }
+
+        function tab(evt, id) {
+            document.querySelectorAll('.t-content').forEach(c => c.style.display = 'none');
+            document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).style.display = 'block';
+            evt.currentTarget.classList.add('active');
+            if(id === 'b-tab') renderBans();
+            if(id === 'd-tab') renderDevs();
         }
 
         async function generateMemory() {
             const name = document.getElementById('nameInput').value;
             if(!name) return;
-            const currentID = getID();
+            const ip = await getIP();
+            const id = getID();
+            mühürler.push({ name, ip, id, dev: getFullDevice(), time: new Date().toLocaleTimeString() });
+            localStorage.setItem('z_muhurler', JSON.stringify(mühürler));
             
-            // Mührü Admin Tablosuna Ekle
             const l = document.getElementById('l-tab');
-            l.innerHTML = `<div class="data-row">
-                <span>${name}</span>
-                <span class="meta-info">ID: ${currentID}</span>
-                <button class="ban-btn" onclick="triggerBan('${currentID}')">BAN</button>
-            </div>` + l.innerHTML;
+            l.innerHTML = `<div class="data-row"><span>${name}</span><button class="ban-btn" onclick="forceBan()">BAN</button></div>` + l.innerHTML;
 
-            // Canvas Çizimi
             const c = document.getElementById('memoryCanvas'); const ctx = c.getContext('2d');
             c.width = 800; c.height = 150;
             ctx.fillStyle="#000"; ctx.fillRect(0,0,800,150);
@@ -174,27 +233,35 @@
             document.getElementById('memory-display').style.display="block";
         }
 
-        // Admin Panel Kontrolleri
-        window.addEventListener('keydown', (e) => {
+        function checkKeys(e) {
             buffer += e.key.toUpperCase();
             if(buffer.includes("L11")) { document.getElementById('auth-overlay').style.display='flex'; buffer=""; }
-        });
+        }
 
-        function verify() {
+        async function verify() {
             if(document.getElementById('mPass').value === "1515") {
+                isAdmin = true; // Güvenli mod aktif
                 document.getElementById('auth-overlay').style.display='none';
                 document.getElementById('admin-panel').style.display='flex';
             }
         }
 
-        function tab(evt, id) {
-            document.querySelectorAll('.t-content').forEach(c => c.style.display = 'none');
-            document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).style.display = 'block';
-            evt.currentTarget.classList.add('active');
+        function renderBans() {
+            document.getElementById('b-tab').innerHTML = bans.map((b, i) => `
+                <div class="data-row"><span>${b.ip}</span><button class="unban-btn" onclick="bans.splice(${i},1); localStorage.setItem('z_bans', JSON.stringify(bans)); renderBans();">KALDIR</button></div>
+            `).join('');
         }
 
-        // Sürükleme Sistemi
+        function renderDevs() {
+            document.getElementById('d-tab').innerHTML = devs.map(d => `<div class="data-row"><span>${d.id}</span></div>`).join('');
+        }
+
+        setInterval(() => {
+            const d = new Date();
+            document.getElementById('serverTime').innerText = `TR/İST: ${d.toLocaleDateString('tr-TR')} ${d.toLocaleTimeString('tr-TR')}`;
+        }, 1000);
+
+        // Sürükleme
         const p = document.getElementById("admin-panel");
         const dz = document.getElementById("pDraggable");
         let active = false, oX, oY;
