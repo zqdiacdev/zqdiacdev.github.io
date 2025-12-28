@@ -5,41 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZODIAC & CELLAT | 2026</title>
     <link rel="icon" type="image/x-icon" href="indir (1).jfif">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root { --primary-red: #ff0000; }
+        
+        /* 2. EKSİK: ARKA PLAN TEMASI */
         body { 
-            margin: 0; padding: 0; background: #000; color: #eee; font-family: 'Consolas', monospace; 
+            margin: 0; padding: 0; 
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), 
+                        url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); 
+            background-size: cover; background-attachment: fixed; 
+            color: #eee; font-family: 'Consolas', monospace; 
             display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden;
         }
-        .container { width: 95%; max-width: 900px; text-align: center; padding: 60px 0; }
+
+        .container { width: 95%; max-width: 900px; text-align: center; padding: 60px 0; z-index: 1; }
         
-        /* Mühür Kartı */
-        .card { background: #050505; border: 1px solid #111; border-left: 4px solid var(--primary-red); padding: 25px; margin-bottom: 30px; text-align: left; }
+        .card { background: rgba(5, 5, 5, 0.9); border: 1px solid #111; border-left: 4px solid var(--primary-red); padding: 25px; margin-bottom: 30px; text-align: left; }
         .input-group { display: flex; gap: 15px; margin-top: 15px; }
         input { flex: 1; background: #000; border: 1px solid #333; color: #fff; padding: 12px; outline: none; font-family: 'Consolas'; }
-        button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; }
+        
+        button { 
+            background: var(--primary-red); color: #fff; border: none; padding: 0 25px; 
+            font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        button:hover { box-shadow: 0 0 20px var(--primary-red); transform: scale(1.05); }
 
-        /* Ana Panel (Görseldeki Birebir Yapı) */
-        .guild-panel { background: #050505; border: 1px solid #111; display: flex; justify-content: space-between; align-items: center; padding: 25px 40px; border-radius: 4px; }
-        .info-grid { display: flex; gap: 40px; }
+        .guild-panel { background: rgba(5, 5, 5, 0.9); border: 1px solid #111; display: flex; justify-content: space-between; align-items: center; padding: 25px 40px; border-radius: 4px; }
         .guild-item { border-left: 3px solid var(--primary-red); padding-left: 18px; text-align: left; }
         .tag { display: block; color: var(--primary-red); font-size: 11px; text-transform: uppercase; font-weight: bold; }
         .val { font-size: 19px; font-weight: bold; color: #fff; }
-        .avatar-frame { border: 2px solid var(--primary-red); padding: 2px; line-height: 0; }
+
+        /* 3. EKSİK: LOGOLARDAKİ KIRMIZI PARLAMA EFEKTİ */
+        .social-links a { 
+            color: #fff; font-size: 30px; transition: 0.4s; text-decoration: none;
+        }
+        .social-links a:hover { 
+            color: var(--primary-red); 
+            filter: drop-shadow(0 0 10px var(--primary-red));
+            transform: scale(1.2);
+        }
+
+        .avatar-frame { border: 2px solid var(--primary-red); padding: 2px; line-height: 0; box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
         .avatar-frame img { width: 85px; height: 85px; object-fit: cover; }
 
-        /* SQL Terminal ve Pencereler */
-        #admin-panel { display: none; position: fixed; top: 5%; right: 2%; width: 450px; height: 550px; background: #000; border: 2px solid red; z-index: 9999; flex-direction: column; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
+        /* 4. EKSİK: TÜM PENCERELER (MÜHÜR, ZİYARETÇİ, BAN) */
+        #admin-panel { display: none; position: fixed; top: 5%; right: 2%; width: 450px; height: 550px; background: #000; border: 2px solid red; z-index: 9999; flex-direction: column; }
         .p-header { background: red; color: white; padding: 10px; font-weight: bold; display: flex; justify-content: space-between; font-size: 12px; }
-        .tabs { display: flex; background: #111; border-bottom: 1px solid #222; }
-        .tab-btn { flex: 1; padding: 12px; border: none; background: transparent; color: #555; cursor: pointer; font-family: 'Consolas'; font-size: 10px; font-weight: bold; }
+        .tabs { display: flex; background: #111; }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: transparent; color: #555; cursor: pointer; font-family: 'Consolas'; font-size: 10px; }
         .tab-btn.active { color: white; background: #050505; border-bottom: 2px solid red; }
-        .log-box { flex: 1; overflow-y: auto; padding: 15px; color: #0f0; font-size: 12px; text-align: left; line-height: 1.6; }
+        .log-box { flex: 1; overflow-y: auto; padding: 15px; color: #0f0; font-size: 12px; text-align: left; }
+        
+        /* 5. EKSİK: TIKLA-BANLA SİSTEMİ */
+        .ban-item { cursor: pointer; padding: 8px; border-bottom: 1px solid #111; transition: 0.2s; }
+        .ban-item:hover { background: rgba(255,0,0,0.2); color: #fff; border-left: 3px solid red; }
 
-        footer { margin-top: 50px; }
-        .footer-time { color: red; font-weight: bold; margin-bottom: 8px; font-size: 16px; }
+        .footer-time { color: red; font-weight: bold; margin-top: 50px; font-size: 16px; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
     </style>
 </head>
 <body onkeydown="checkKeys(event);">
@@ -48,7 +71,7 @@
         <h1 style="letter-spacing: 20px; font-size: 80px; margin-bottom: 40px;">ZODIAC</h1>
 
         <div class="card">
-            <div style="color:red; font-size:11px; font-weight:bold;">[SQL MONITOR] - ADINI MÜHÜRLE</div>
+            <div style="color:red; font-size:11px; font-weight:bold;">[DATABASE] - ADINI MÜHÜRLE</div>
             <div class="input-group">
                 <input type="text" id="nameIn" placeholder="İsim yaz...">
                 <button onclick="saveMuhur()">KAYDET</button>
@@ -56,22 +79,20 @@
         </div>
 
         <div class="guild-panel">
-            <div class="info-grid">
+            <div style="display:flex; gap:40px;">
                 <div class="guild-item"><span class="tag">Owner</span><span class="val">Zodiac</span></div>
                 <div class="guild-item"><span class="tag">Founder</span><span class="val">Cellat</span></div>
             </div>
-            <div style="display:flex; gap:20px; font-size:30px;">
-                <a href="https://discordapp.com/users/984393535811903488" target="_blank" style="color:white;"><i class="fab fa-discord"></i></a>
-                <a href="https://www.instagram.com/maybe.c3llat" target="_blank" style="color:white;"><i class="fab fa-instagram"></i></a>
+            
+            <div class="social-links" style="display:flex; gap:25px;">
+                <a href="https://discordapp.com/users/984393535811903488" target="_blank"><i class="fab fa-discord"></i></a>
+                <a href="https://www.instagram.com/maybe.c3llat" target="_blank"><i class="fab fa-instagram"></i></a>
             </div>
+
             <div class="avatar-frame"><img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif"></div>
         </div>
 
-        <footer>
-            <div class="footer-time" id="serverTime">TR/İST: 28.12.2026 17:12:00</div>
-            <div style="color:#888;">© 2026 ZODIAC. Tüm hakları saklıdır.</div>
-            <div style="color:#333; font-size:11px; margin-top:10px; letter-spacing:2px;">ZODIAC v6.5.0-MONITOR</div>
-        </footer>
+        <div class="footer-time" id="serverTime">TR/İST: 28.12.2026 17:12:00</div>
     </div>
 
     <div id="admin-panel">
@@ -81,7 +102,7 @@
             <button class="tab-btn" onclick="switchTab('ziyaretciler', this)">ZİYARETÇİLER</button>
             <button class="tab-btn" onclick="switchTab('ban_listesi', this)">BAN LİSTESİ</button>
         </div>
-        <div id="logBox" class="log-box">Veri bekleniyor...</div>
+        <div id="logBox" class="log-box"></div>
     </div>
 
     <script>
@@ -90,24 +111,32 @@
         let currentTab = 'muhurler';
 
         async function fetchData(table) {
-            try {
-                const res = await fetch(`${SB_URL}/${table}?select=*&order=id.desc`, {
-                    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
-                });
-                const data = await res.json();
-                renderLogs(data, table);
-            } catch (e) { document.getElementById('logBox').innerText = "Bağlantı hatası!"; }
+            const res = await fetch(`${SB_URL}/${table}?select=*&order=id.desc`, {
+                headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+            });
+            const data = await res.json();
+            renderLogs(data, table);
         }
 
         function renderLogs(data, table) {
             const box = document.getElementById('logBox');
-            if (!data || data.length === 0) { box.innerHTML = "Kayıt bulunamadı."; return; }
-            
             box.innerHTML = data.map(item => {
-                if(table === 'muhurler') return `<div>> [MÜHÜR] ${item.isim} <span style="color:#222;">(${item.tarih})</span></div>`;
-                if(table === 'ziyaretciler') return `<div>> [GİRİŞ] IP: ${item.ip} | ${item.cihaz_bilgisi}</div>`;
-                if(table === 'ban_listesi') return `<div style="color:red;">> [BAN] IP: ${item.ip} | Sebep: ${item.sebep}</div>`;
+                if(table === 'muhurler') return `<div class="ban-item" onclick="banPrompt('${item.isim}')">> [MÜHÜR] ${item.isim}</div>`;
+                if(table === 'ziyaretciler') return `<div class="ban-item" onclick="banPrompt('${item.ip}')">> [GİRİŞ] IP: ${item.ip}</div>`;
+                if(table === 'ban_listesi') return `<div style="color:red; padding:8px;">> [BANNED] IP: ${item.ip} - ${item.sebep}</div>`;
             }).join('');
+        }
+
+        async function banPrompt(target) {
+            const reason = prompt(target + " kullanıcısını banlamak için sebep yazın:");
+            if(!reason) return;
+            await fetch(`${SB_URL}/ban_listesi`, {
+                method: 'POST',
+                headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ip: target, sebep: reason })
+            });
+            alert("Sistemden yasaklandı!");
+            fetchData(currentTab);
         }
 
         function switchTab(table, btn) {
@@ -126,19 +155,7 @@
                 body: JSON.stringify({ isim: n })
             });
             document.getElementById('nameIn').value = "";
-            if(currentTab === 'muhurler') fetchData('muhurler');
-        }
-
-        async function logVisitor() {
-            try {
-                const ipRes = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipRes.json();
-                await fetch(`${SB_URL}/ziyaretciler`, {
-                    method: 'POST',
-                    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ip: ipData.ip, cihaz_bilgisi: navigator.platform })
-                });
-            } catch (e) {}
+            fetchData('muhurler');
         }
 
         let keys = "";
@@ -155,8 +172,6 @@
             const d = new Date();
             document.getElementById('serverTime').innerText = `TR/İST: ${d.toLocaleDateString('tr-TR').replace(/\d{4}$/,'2026')} ${d.toLocaleTimeString('tr-TR')}`;
         }, 1000);
-
-        window.onload = logVisitor;
     </script>
 </body>
 </html>
