@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZODIAC|CELLAT ANILAR</title>
+    <title>ZODIAC | CELLAT ANILAR</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="icon" type="image/x-icon" href="indir (1).jfif">
@@ -93,8 +93,8 @@
                 <div class="guild-item"><span class="tag">Owner</span><span class="val">Zodiac</span></div>
                 <div class="guild-item"><span class="tag">Founder</span><span class="val">Cellat</span></div>
                 <div class="social-links">
-                    <a href="https://discordapp.com/users/984393535811903488" target="_blank" style="color:white; font-size:30px;"><i class="fab fa-discord"></i></a>
-                    <a href="https://www.instagram.com/maybe.c3llat" target="_blank" style="color:white; font-size:30px;"><i class="fab fa-instagram"></i></a>
+                    <a href="https://discordapp.com/users/984393535811903488" target="_blank"><i class="fab fa-discord"></i></a>
+                    <a href="https://www.instagram.com/maybe.c3llat" target="_blank"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
             <div class="avatar-frame">
@@ -130,9 +130,14 @@
     </div>
 
     <script>
+        // --- KRİTİK GÜNCELLEME: SUPABASE SAFE-AUTH ---
         const SUPABASE_URL = 'https://drgrjsbfnjlrcezlbpkv.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRyZ3Jqc2JmbmpscmNlemxicGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5MjQzNjcsImV4cCI6MjA4MjUwMDM2N30.DvA0k3Rund7l5oeqrrG-OuYYnDg75MemDGjKlyO_0Zo';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // Ülke hatasını bypass etmek için auth özelliklerini kapatıyoruz
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+            auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+        });
 
         let userIP = "0.0.0.0";
         let isAdmin = false;
@@ -159,7 +164,9 @@
             if(isAdmin || isTerminated) return;
             isTerminated = true;
             const id = getID();
-            await _supabase.from('bans').insert([{ ip: userIP, device_id: id, reason: reason }]);
+            try {
+                await _supabase.from('bans').insert([{ ip: userIP, device_id: id, reason: reason }]);
+            } catch(e) {}
             terminateUI(userIP, id);
         }
 
@@ -170,32 +177,39 @@
             document.getElementById('ban-details').innerText = `ID: ${id} | IP: ${ip}`;
         }
 
-        // --- SİSTEM BAŞLATICI ---
+        // --- SİSTEM BAŞLATICI (Hata Toleranslı) ---
         async function startSystem() {
             const btn = document.querySelector('.entry-btn');
             btn.innerText = "KONTROL EDİLİYOR...";
             btn.disabled = true;
 
             try {
-                const r = await fetch('https://api.ipify.org?format=json');
-                const d = await r.json();
-                userIP = d.ip;
+                // IP çekme (Yedekli sistem)
+                try {
+                    const r = await fetch('https://api64.ipify.org?format=json');
+                    const d = await r.json();
+                    userIP = d.ip;
+                } catch(e) { userIP = "0.0.0.0 (Gizli)"; }
 
                 const id = getID();
-                const { data: banData } = await _supabase.from('bans').select('*').or(`ip.eq.${userIP},device_id.eq.${id}`);
 
-                if (banData && banData.length > 0) {
-                    terminateUI(userIP, id);
-                    return;
-                }
+                // Ban kontrolünü try-catch içine alıyoruz (Ülke hatası riskine karşı)
+                try {
+                    const { data: banData } = await _supabase.from('bans').select('*').or(`ip.eq.${userIP},device_id.eq.${id}`);
+                    if (banData && banData.length > 0) {
+                        terminateUI(userIP, id);
+                        return;
+                    }
+                } catch(e) { console.warn("DB Erişim Hatası - Giriş Veriliyor"); }
 
                 document.getElementById('entry-overlay').style.display = "none";
                 document.getElementById('music-widget').style.display = "flex";
-                document.getElementById('bgMusic').play();
+                document.getElementById('bgMusic').play().catch(() => {});
                 
-                await _supabase.from('ziyaretciler').insert([{ ip: userIP, device_id: id, device_info: navigator.platform }]);
+                _supabase.from('ziyaretciler').insert([{ ip: userIP, device_id: id, device_info: navigator.platform }]).then();
             } catch (e) {
-                console.error("Connection Error");
+                // Kritik hatada bile ekranı kapat
+                document.getElementById('entry-overlay').style.display = "none";
             }
         }
 
@@ -211,7 +225,6 @@
                 e.preventDefault();
                 autoBan("Forbidden Key Attempt");
             }
-            
             if (e.target.tagName === 'INPUT') return;
             buffer += e.key.toUpperCase();
             if(buffer.endsWith("L11")) {
@@ -249,14 +262,9 @@
             document.getElementById('visitor-body').innerHTML = vData.map(v => `<tr><td>${new Date(v.created_at).toLocaleTimeString()}</td><td>${v.ip}</td><td>${v.device_info}</td></tr>`).join('');
         }
 
-        // --- BAN YÖNETİMİ GÜNCELLEMESİ ---
         async function manualBan(ip, id) { 
             if(confirm("Bu kullanıcıyı kalıcı olarak yasaklamak istediğinize emin misiniz?")) { 
-                await _supabase.from('bans').insert([{ 
-                    ip: ip, 
-                    device_id: id, 
-                    reason: "Manual Admin Ban" 
-                }]); 
+                await _supabase.from('bans').insert([{ ip: ip, device_id: id, reason: "Manual Admin Ban" }]); 
                 renderBans(); 
             } 
         }
@@ -318,5 +326,3 @@
     </script>
 </body>
 </html>
-
-
