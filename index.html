@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZODIAC|CELLAT ANILAR</title>
+    <title>ZODIAC | CELLAT ANILAR</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="icon" type="image/x-icon" href="indir (1).jfif">
@@ -33,6 +33,12 @@
         button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         button:hover { animation: glow 0.8s infinite; }
         
+        /* Müzik Paneli Tasarımı */
+        #music-widget { position: fixed; bottom: 20px; right: 20px; z-index: 1000; background: rgba(0,0,0,0.9); border: 1px solid #333; border-right: 3px solid red; padding: 12px 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 0 20px rgba(255,0,0,0.1); }
+        .m-status { color: red; font-size: 10px; font-weight: bold; letter-spacing: 1px; }
+        .m-btn { background: transparent; border: 1px solid red; color: white; padding: 6px 12px; cursor: pointer; font-family: 'Consolas'; font-size: 11px; transition: 0.3s; }
+        .m-btn:hover { background: red; box-shadow: 0 0 10px red; }
+
         .guild-panel { background: rgba(5, 5, 5, 0.98); border: 1px solid rgba(255, 255, 255, 0.05); display: flex; justify-content: space-between; align-items: center; padding: 25px 40px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 30px; }
         .info-grid { display: flex; gap: 40px; }
         .guild-item { border-left: 3px solid var(--primary-red); padding-left: 18px; text-align: left; }
@@ -63,6 +69,14 @@
     </style>
 </head>
 <body onkeydown="checkKeys(event);">
+
+    <div id="music-widget">
+        <div class="m-status">[ZODIAC AUDIO]</div>
+        <button class="m-btn" id="playBtn" onclick="toggleMusic()">OYNAT</button>
+        <audio id="bgMusic" loop>
+            <source src="sarki.mp3" type="audio/mpeg">
+        </audio>
+    </div>
 
     <div id="ban-screen">
         <h1>ACCESS DENIED</h1>
@@ -150,6 +164,22 @@
         let _supabase;
         try { _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e) { console.log("Supabase Offline"); }
 
+        // MÜZİK FONKSİYONU
+        let isPlaying = false;
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const btn = document.getElementById('playBtn');
+            if(!isPlaying) {
+                music.play();
+                btn.innerText = "DURAKLAT";
+                isPlaying = true;
+            } else {
+                music.pause();
+                btn.innerText = "OYNAT";
+                isPlaying = false;
+            }
+        }
+
         let buffer = "";
         let isAdmin = false;
         const getID = () => btoa(navigator.userAgent).substring(10, 25);
@@ -218,7 +248,6 @@
             ctx.fillStyle="red"; ctx.font="12px Courier New"; ctx.fillText(getNow(), 20, 30);
             ctx.fillStyle="#fff"; ctx.font="bold 45px Courier New"; ctx.textAlign="center";
             ctx.fillText(name.toUpperCase(), 400, 100);
-            // SIGIL ID çizimi kaldırıldı
             
             document.getElementById('memory-display').style.display="block";
             nameInput.value = "";
@@ -313,4 +342,3 @@
     </script>
 </body>
 </html>
-
