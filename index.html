@@ -28,7 +28,7 @@
         footer { margin-top: 50px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px; font-size: 13px; color: #888; padding-bottom: 40px; }
         .version-tag { color: #555; font-size: 10px; margin-top: 8px; letter-spacing: 2px; }
 
-        /* PANEL */
+        /* ADMIN PANEL TASARIMI */
         #admin-panel { display: none; position: fixed; top: 20px; right: 20px; width: 380px; height: 480px; background: #000; border: 2px solid red; z-index: 9999; resize: both; overflow: hidden; box-shadow: 0 0 40px #000; }
         .p-header { background: red; color: white; padding: 10px; cursor: move; font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; }
         .p-tabs { display: flex; background: #111; }
@@ -81,9 +81,9 @@
     <div id="admin-panel">
         <div class="p-header" id="pDraggable"><span>ZODIAC COMMAND</span><span onclick="this.parentElement.parentElement.style.display='none'" style="cursor:pointer;">[X]</span></div>
         <div class="p-tabs">
-            <button class="t-btn active" onclick="tab(event, 'l-tab')">LOGLAR</button>
-            <button class="t-btn" onclick="tab(event, 'd-tab')">CİHAZLAR & IP</button>
-            <button class="t-btn" onclick="tab(event, 'b-tab')">BANLAR</button>
+            <button class="t-btn active" id="btn-l" onclick="tab(event, 'l-tab')">LOGLAR</button>
+            <button class="t-btn" id="btn-d" onclick="tab(event, 'd-tab')">CİHAZLAR & IP</button>
+            <button class="t-btn" id="btn-b" onclick="tab(event, 'b-tab')">BANLAR</button>
         </div>
         <div id="l-tab" class="t-content active"></div>
         <div id="d-tab" class="t-content"></div>
@@ -101,21 +101,19 @@
 
     <script>
         const getID = () => btoa(navigator.userAgent).substring(10, 25);
+        
+        // HAFIZA SİSTEMİ (LocalStorage Birleştirme)
         let bans = JSON.parse(localStorage.getItem('z_bans') || '[]');
         let devs = JSON.parse(localStorage.getItem('z_devs') || '[]');
+        let persistentLogs = JSON.parse(localStorage.getItem('z_persistent_logs') || '[]');
         let buffer = "";
 
-        // CİHAZ TESPİT FONKSİYONU
         function getDeviceInfo() {
             const ua = navigator.userAgent;
-            let device = "Bilinmeyen Cihaz";
-            if (/android/i.test(ua)) device = "Android Telefon";
-            else if (/iPhone|iPad|iPod/i.test(ua)) device = "iOS Cihaz (iPhone/iPad)";
-            else if (/Windows/i.test(ua)) device = "Windows PC";
-            else if (/Macintosh/i.test(ua)) device = "Apple Mac";
-            else if (/Linux/i.test(ua)) device = "Linux PC";
-            
-            const browser = ua.includes("Chrome") ? "Chrome" : ua.includes("Firefox") ? "Firefox" : ua.includes("Safari") ? "Safari" : "Tarayıcı";
+            let device = "PC";
+            if (/android/i.test(ua)) device = "Android";
+            else if (/iPhone|iPad|iPod/i.test(ua)) device = "iOS";
+            const browser = ua.includes("Chrome") ? "Chrome" : "Browser";
             return `${device} (${browser})`;
         }
 
@@ -126,13 +124,27 @@
             } catch(e) { return "GİZLİ_IP"; }
         }
 
+        // LOGLARI KALICI YAP
+        function addLog(m) {
+            const time = new Date().toLocaleTimeString();
+            const logEntry = `[${time}] ${m}`;
+            persistentLogs.unshift(logEntry); // Yeni logu başa ekle
+            if(persistentLogs.length > 50) persistentLogs.pop(); // Max 50 log tut
+            localStorage.setItem('z_persistent_logs', JSON.stringify(persistentLogs));
+            renderLogs();
+        }
+
+        function renderLogs() {
+            const l = document.getElementById('l-tab');
+            l.innerHTML = persistentLogs.map(log => `<div>${log}</div>`).join('');
+        }
+
         async function applyLock() {
             const ip = await getIP();
             document.body.style.background = "#050000";
             document.body.innerHTML = `<div style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; font-family:monospace; color:red; text-align:center; padding:20px;">
                 <h1 style="font-size:40px; text-shadow:0 0 10px red;">SİSTEM İHLALİ</h1>
                 <div style="border:1px solid red; padding:20px; background:rgba(255,0,0,0.1); text-align:left; width:80%; max-width:500px;">
-                    <p>> [CIHAZ]: ${getDeviceInfo()}</p>
                     <p>> [IP]: ${ip}</p>
                     <p>> [STATUS]: BANNED</p>
                 </div>
@@ -163,13 +175,15 @@
             document.getElementById(id).style.display = "block";
             evt.currentTarget.className += " active";
             if(id === 'd-tab') renderDevs();
+            if(id === 'b-tab') renderBans();
+            if(id === 'l-tab') renderLogs();
         }
 
         async function logDev() {
             const ip = await getIP();
             const id = getID();
             const info = getDeviceInfo();
-            if(!devs.find(x => x.id === id && x.ip === ip)) {
+            if(!devs.find(x => x.ip === ip)) {
                 devs.push({id:id, ip:ip, info:info, date:new Date().toLocaleString()});
                 localStorage.setItem('z_devs', JSON.stringify(devs));
             }
@@ -180,7 +194,7 @@
                 <div class="dev-entry">
                     <b style="color:red;">IP: ${d.ip}</b><br>
                     <span style="color:white;">Cihaz: ${d.info}</span><br>
-                    <small style="color:#666;">ID: ${d.id} | ${d.date}</small>
+                    <small style="color:#666;">${d.date}</small>
                 </div>`).join('');
         }
 
@@ -193,17 +207,13 @@
             renderBans(); addLog("BAN KALDIRILDI: " + id);
         }
 
-        function addLog(m) {
-            const l = document.getElementById('l-tab');
-            l.innerHTML = `<div>[${new Date().toLocaleTimeString()}] ${m}</div>` + l.innerHTML;
-        }
-
         function verify() {
             if(document.getElementById('mPass').value === "1515") {
                 localStorage.setItem('is_admin', 'true');
                 document.getElementById('auth-overlay').style.display='none';
                 document.getElementById('admin-panel').style.display='block';
-                logDev(); addLog("Admin yetkisi aktif.");
+                logDev(); 
+                addLog("Admin girişi başarılı.");
             }
         }
 
@@ -214,7 +224,7 @@
             ctx.fillStyle="#000"; ctx.fillRect(0,0,800,200);
             ctx.fillStyle="#fff"; ctx.font="bold 30px Courier New"; ctx.textAlign="center"; ctx.fillText(n.toUpperCase(), 400, 100);
             document.getElementById('memory-display').style.display="block";
-            addLog("Mühür: " + n);
+            addLog("Yeni mühür oluşturuldu: " + n);
         }
 
         setInterval(() => {
@@ -222,12 +232,18 @@
             document.getElementById('serverTime').innerText = `TR/İST: ${d.toLocaleDateString('tr-TR').replace(/\d{4}$/,'2026')} ${d.toLocaleTimeString('tr-TR')}`;
         }, 1000);
 
+        // PANEL SÜRÜKLEME
         dragElement(document.getElementById("admin-panel"));
         function dragElement(e){var n=0,t=0,o=0,u=0;function i(e){e=e||window.event;e.preventDefault();o=e.clientX;u=e.clientY;document.onmouseup=m;document.onmousemove=l}function l(i){i=i||window.event;i.preventDefault();n=o-i.clientX;t=u-i.clientY;o=i.clientX;u=i.clientY;e.style.top=e.offsetTop-t+"px";e.style.left=e.offsetLeft-n+"px"}function m(){document.onmouseup=null;document.onmousemove=null}document.getElementById("pDraggable").onmousedown=i}
 
-        if(localStorage.getItem('is_admin')) logDev();
+        // BAŞLANGIÇTA LOGLARI GÖSTER
+        window.onload = () => {
+            renderLogs();
+            if(localStorage.getItem('is_admin') === 'true') {
+                document.getElementById('admin-panel').style.display='block';
+                addLog("Sistem yeniden yüklendi.");
+            }
+        };
     </script>
 </body>
 </html>
-
-
