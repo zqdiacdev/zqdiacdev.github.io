@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZODIAC | 2026</title>
+    <title>ZODIAC | UNSTOPPABLE</title>
     
     <link rel="icon" type="image/x-icon" href="indir (1).jfif">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,15 +11,9 @@
     <style>
         :root { --primary-red: #ff0000; }
         
-        /* BAN VE KONSOL ENGEL EKRANI */
-        #ban-screen {
-            display: none; position: fixed; inset: 0; background: #000; z-index: 1000000;
-            color: #fff; flex-direction: column; justify-content: center; align-items: center;
-            font-family: 'Arial Black', sans-serif; text-align: center;
-        }
-        #ban-screen h1 { font-size: clamp(30px, 8vw, 70px); color: red; margin: 0; text-shadow: 0 0 30px red; }
+        /* BAN EKRANI TAMAMEN SİLİNDİ VEYA GİZLENDİ */
+        #ban-screen { display: none !important; }
 
-        /* RGB ANİMASYONU */
         @keyframes rgbBorder {
             0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
             33% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; }
@@ -27,36 +21,21 @@
             100% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
         }
 
-        @keyframes glow {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; filter: brightness(1.5); }
-            100% { opacity: 1; }
-        }
-
-        body { margin: 0; padding: 0; background: linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.78)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); background-size: cover; background-position: center; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
+        body { margin: 0; padding: 0; background: linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.78)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); background-size: cover; background-position: center; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
         
         .container { width: 95%; max-width: 900px; text-align: center; padding: 60px 0; z-index: 1; }
         .zodiac-title { font-size: clamp(50px, 12vw, 100px); font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 20px; margin-bottom: 50px; display: inline-block; }
         
         .card { background: rgba(5, 5, 5, 0.9); border: 1px solid rgba(255, 0, 0, 0.2); border-left: 4px solid var(--primary-red); padding: 25px; margin-bottom: 20px; text-align: left; }
         .input-group { display: flex; gap: 15px; margin-top: 15px; }
-        input { flex: 1; background: rgba(0, 0, 0, 0.8); border: 1px solid #333; color: #fff; padding: 12px; outline: none; border-radius: 0; }
+        input { flex: 1; background: rgba(0, 0, 0, 0.8); border: 1px solid #333; color: #fff; padding: 12px; outline: none; }
         
-        button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        button:hover { animation: glow 0.8s infinite; }
+        button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; height: 45px; }
 
-        .guild-panel { background: rgba(5, 5, 5, 0.98); border: 1px solid rgba(255, 255, 255, 0.05); display: flex; justify-content: space-between; align-items: center; padding: 25px 40px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 30px; }
-        .info-grid { display: flex; gap: 40px; }
+        .guild-panel { background: rgba(5, 5, 5, 0.98); border: 1px solid rgba(255, 255, 255, 0.05); display: flex; justify-content: space-between; align-items: center; padding: 25px 40px; margin-bottom: 30px; }
         .guild-item { border-left: 3px solid var(--primary-red); padding-left: 18px; text-align: left; }
-        .tag { display: block; color: var(--primary-red); font-size: 11px; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
         .val { font-size: 18px; font-weight: bold; color: #fff; }
         
-        .social-links { display: flex; gap: 20px; align-items: center; }
-        .social-links a { color: white; font-size: 30px; transition: 0.3s; text-decoration: none; }
-        .social-links a:hover { color: var(--primary-red); transform: translateY(-5px); filter: drop-shadow(0 0 10px red); }
-        .avatar-frame { border: 2px solid var(--primary-red); padding: 2px; line-height: 0; }
-        .avatar-frame img { width: 85px; height: 85px; object-fit: cover; }
-
         #admin-panel { 
             display: none; position: fixed; top: 100px; left: 100px; 
             width: 650px; height: 450px; 
@@ -64,27 +43,14 @@
             flex-direction: column; overflow: hidden;
             resize: both; animation: rgbBorder 5s infinite;
         }
-        .p-header { background: #111; color: white; padding: 12px; cursor: move; font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; border-bottom: 1px solid #222; }
-        .p-tabs { display: flex; background: #080808; }
-        .t-btn { flex: 1; padding: 12px; border: none; background: transparent; color: #555; font-size: 10px; cursor: pointer; font-weight: bold; border-bottom: 2px solid transparent; }
-        .t-btn.active { color: white; background: #111; border-bottom: 2px solid red; }
-        .t-content { flex: 1; overflow-y: auto; padding: 15px; color: #0f0; font-size: 11px; background: #050505; }
-        
-        .data-row { display: flex; justify-content: space-between; border-bottom: 1px solid #111; padding: 10px 5px; align-items: center; gap: 10px; }
-        .meta-info { color: #888; font-size: 10px; flex: 1; text-align: right; }
-        .ban-btn { background: red; color: white; border: none; padding: 4px 8px; cursor: pointer; font-size: 9px; }
-        .unban-btn { background: #00ff00; color: #000; border: none; padding: 4px 8px; cursor: pointer; font-size: 9px; font-weight: bold; }
-
+        .p-header { background: #111; color: white; padding: 12px; cursor: move; display: flex; justify-content: space-between; }
+        .t-content { flex: 1; overflow-y: auto; padding: 15px; color: #0f0; background: #050505; }
         #auth-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000; justify-content: center; align-items: center; }
-        footer { margin-top: 50px; color: #444; font-size: 12px; }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
-    <div id="ban-screen">
-        <h1>İNDEXMİ ATACAN EZİK :D</h1>
-        <p style="color: #333; font-size: 11px; margin-top: 20px;">ACCESS DENIED BY ZODIAC</p>
-    </div>
+    <div id="ban-screen"></div>
 
     <div class="container" id="main-content">
         <h1 class="zodiac-title">ZODIAC</h1>
@@ -100,129 +66,60 @@
         <div id="memory-display" style="display:none; margin-bottom: 20px;"><canvas id="memoryCanvas" style="width:100%; border: 2px solid var(--primary-red);"></canvas></div>
 
         <div class="guild-panel">
-            <div class="info-grid">
-                <div class="guild-item"><span class="tag">Owner</span><span class="val">Zodiac</span></div>
-                <div class="guild-item"><span class="tag">Founder</span><span class="val">Cellat</span></div>
-                <div class="social-links">
-                    <a href="https://discordapp.com/users/984393535811903488" target="_blank"><i class="fab fa-discord"></i></a>
-                    <a href="https://www.instagram.com/maybe.c3llat" target="_blank"><i class="fab fa-instagram"></i></a>
-                </div>
+            <div class="info-grid" style="display:flex; gap:40px;">
+                <div class="guild-item"><span style="color:red; font-size:10px; display:block;">Owner</span><span class="val">Zodiac</span></div>
+                <div class="guild-item"><span style="color:red; font-size:10px; display:block;">Founder</span><span class="val">Cellat</span></div>
             </div>
-            <div class="avatar-frame">
-                <img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif" alt="PIRATE">
+            <div style="display:flex; gap:20px;">
+                <a href="#" style="color:white; font-size:25px;"><i class="fab fa-discord"></i></a>
+                <a href="#" style="color:white; font-size:25px;"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
-
-        <footer>
-            <div id="serverTime" style="color: red; font-weight: bold; margin-bottom: 5px;">Yükleniyor...</div>
-            <div>© 2026 ZODIAC. Tüm hakları saklıdır.</div>
-            <div style="font-size:9px; margin-top:5px; color:#222;">ZODIAC v10.0-STABLE</div>
-        </footer>
     </div>
 
     <div id="admin-panel">
         <div class="p-header" id="pDraggable"><span>ZODIAC COMMAND CENTER</span><span onclick="this.parentElement.parentElement.style.display='none'" style="cursor:pointer;">[X]</span></div>
-        <div class="p-tabs">
-            <button class="t-btn active" onclick="tab(event, 'l-tab')">MÜHÜRLER</button>
-            <button class="t-btn" onclick="tab(event, 'd-tab')">CİHAZLAR & IP</button>
-            <button class="t-btn" onclick="tab(event, 'b-tab')">BAN LİSTESİ</button>
+        <div class="t-content">
+            <p>> Sistem Erişimi Başarılı...</p>
+            <p>> Ban sistemi devre dışı bırakıldı.</p>
         </div>
-        <div id="l-tab" class="t-content" style="display:block;"></div>
-        <div id="d-tab" class="t-content" style="display:none;"></div>
-        <div id="b-tab" class="t-content" style="display:none;"></div>
-        <div style="padding:10px; background:#111;"><button onclick="localStorage.clear(); location.reload();" style="width:100%; background:#222; color:red; border:none; padding:8px; font-size:9px;">SYSTEM RESET</button></div>
     </div>
 
     <div id="auth-overlay">
         <div style="border: 2px solid red; padding: 40px; background: #000; text-align: center;">
             <p style="color:red; font-weight:bold;">MASTER KEY REQUIRED</p>
-            <input type="password" id="mPass" style="background:#000; color:#fff; border:1px solid #444; padding:15px; text-align:center; width:220px; outline:none; margin: 20px 0;">
+            <input type="password" id="mPass" style="background:#000; color:#fff; border:1px solid #444; padding:15px; margin: 20px 0;">
             <button onclick="verify()">ENTER</button>
         </div>
     </div>
 
     <script>
-        // --- BAN KALDIRICI (TEK SEFERLİK) ---
-        localStorage.removeItem('z_bans'); 
-        console.log("Ban listesi temizlendi.");
+        // TÜM BAN SİSTEMİNİ SİLDİK
+        localStorage.clear();
 
-        // --- GÜVENLİK VE KONSOL ENGEL ---
-        (function() {
-            document.addEventListener('contextmenu', e => e.preventDefault());
-            document.onkeydown = function(e) {
-                if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
-                    triggerBan();
-                    return false;
-                }
-            };
-            let devtools = function() {};
-            devtools.toString = function() { triggerBan(); };
-            console.log('%c', devtools);
-        })();
+        // Fonksiyonlar boşa çıkarıldı (Hata vermemesi için isimleri duruyor ama içleri boş)
+        function triggerBan() { return false; }
+        function checkInitialBan() { return false; }
 
-        function triggerBan() {
-            document.getElementById('ban-screen').style.display = 'flex';
-            if(document.getElementById('main-content')) document.getElementById('main-content').remove();
-        }
-
-        // --- ANA SİSTEM ---
         const getID = () => btoa(navigator.userAgent).substring(10, 25);
-        let mühürler = JSON.parse(localStorage.getItem('z_muhurler') || '[]');
-        let bans = JSON.parse(localStorage.getItem('z_bans') || '[]'); // Yukarıda sildiğimiz için boş gelecek
-        let devs = JSON.parse(localStorage.getItem('z_devs') || '[]');
         let buffer = "";
 
-        async function getIP() {
-            try {
-                const r = await fetch('https://api.ipify.org?format=json');
-                const d = await r.json(); return d.ip;
-            } catch(e) { return "0.0.0.0"; }
-        }
+        // Admin paneli için L11 şifresi
+        window.addEventListener('keydown', (e) => {
+            buffer += e.key.toUpperCase();
+            if(buffer.includes("L11")) { document.getElementById('auth-overlay').style.display='flex'; buffer=""; }
+        });
 
-        async function checkInitialBan() {
-            const ip = await getIP();
-            const id = getID();
-            // Ban listesi temizlendiği için burası artık triggerlanmayacak
-            if(bans.find(b => b.ip === ip || b.id === id)) {
-                triggerBan();
+        function verify() {
+            if(document.getElementById('mPass').value === "1515") {
+                document.getElementById('auth-overlay').style.display='none';
+                document.getElementById('admin-panel').style.display='flex';
             }
-        }
-
-        function getFullDevice() {
-            const ua = navigator.userAgent;
-            let os = "PC";
-            if (/android/i.test(ua)) os = "Android";
-            else if (/iPhone|iPad/i.test(ua)) os = "iOS";
-            return `${os} (${navigator.platform})`;
-        }
-
-        function tab(evt, id) {
-            document.querySelectorAll('.t-content').forEach(c => c.style.display = 'none');
-            document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).style.display = 'block';
-            evt.currentTarget.classList.add('active');
-            if(id === 'b-tab') renderBans();
-            if(id === 'd-tab') renderDevs();
         }
 
         async function generateMemory() {
             const name = document.getElementById('nameInput').value;
             if(!name) return;
-            const ip = await getIP();
-            const id = getID();
-            const dev = getFullDevice();
-            const time = new Date().toLocaleTimeString();
-
-            mühürler.push({ name, ip, id, dev, time });
-            localStorage.setItem('z_muhurler', JSON.stringify(mühürler));
-
-            const l = document.getElementById('l-tab');
-            l.innerHTML = `<div class="data-row">
-                <span>[${time}] ${name}</span>
-                <span class="meta-info">${ip}</span>
-                <button class="ban-btn" onclick="banUser('${ip}', '${id}')">BAN</button>
-            </div>` + l.innerHTML;
-
             const c = document.getElementById('memoryCanvas'); const ctx = c.getContext('2d');
             c.width = 800; c.height = 150;
             ctx.fillStyle="#000"; ctx.fillRect(0,0,800,150);
@@ -231,69 +128,13 @@
             document.getElementById('memory-display').style.display="block";
         }
 
-        function banUser(ip, id) {
-            if(!bans.find(b => b.ip === ip)) {
-                bans.push({ip, id, date: new Date().toLocaleString()});
-                localStorage.setItem('z_bans', JSON.stringify(bans));
-                alert("MÜHÜRLENDİ!");
-                location.reload();
-            }
-        }
-
-        function renderBans() {
-            document.getElementById('b-tab').innerHTML = bans.map((b, index) => `
-                <div class="data-row">
-                    <span>IP: ${b.ip}</span>
-                    <button class="unban-btn" onclick="removeBan(${index})">KALDIR</button>
-                </div>`).join('');
-        }
-
-        function removeBan(index) {
-            bans.splice(index, 1);
-            localStorage.setItem('z_bans', JSON.stringify(bans));
-            renderBans();
-        }
-
-        function renderDevs() {
-            document.getElementById('d-tab').innerHTML = devs.map(d => `
-                <div class="data-row">
-                    <span>> ${d.id}</span>
-                    <div class="meta-info">${d.ip}</div>
-                </div>`).reverse().join('');
-        }
-
-        window.addEventListener('keydown', (e) => {
-            buffer += e.key.toUpperCase();
-            if(buffer.includes("L11")) { document.getElementById('auth-overlay').style.display='flex'; buffer=""; }
-        });
-
-        async function verify() {
-            if(document.getElementById('mPass').value === "1515") {
-                document.getElementById('auth-overlay').style.display='none';
-                document.getElementById('admin-panel').style.display='flex';
-                const ip = await getIP();
-                const id = getID();
-                if(!devs.find(x => x.id === id)) {
-                    devs.push({id, ip, info: getFullDevice()});
-                    localStorage.setItem('z_devs', JSON.stringify(devs));
-                }
-            }
-        }
-
-        setInterval(() => {
-            const d = new Date();
-            if(document.getElementById('serverTime'))
-                document.getElementById('serverTime').innerText = `TR/İST: ${d.toLocaleDateString('tr-TR')} ${d.toLocaleTimeString('tr-TR')}`;
-        }, 1000);
-
+        // Sürükleme Paneli
         const p = document.getElementById("admin-panel");
         const dz = document.getElementById("pDraggable");
         let active = false, oX, oY;
         dz.onmousedown = (e) => { active = true; oX = e.clientX - p.offsetLeft; oY = e.clientY - p.offsetTop; };
         document.onmousemove = (e) => { if(active) { p.style.left = (e.clientX - oX) + "px"; p.style.top = (e.clientY - oY) + "px"; } };
         document.onmouseup = () => active = false;
-
-        checkInitialBan();
     </script>
 </body>
 </html>
