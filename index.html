@@ -7,72 +7,81 @@
     <link rel="icon" type="image/x-icon" href="indir (1).jfif">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary-red: #ff0000; }
-        #ban-screen { display: none; position: fixed; inset: 0; background: #000; color: red; z-index: 10000; justify-content: center; align-items: center; flex-direction: column; font-family: 'Consolas'; text-align: center; }
-        body { margin: 0; padding: 0; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); background-size: cover; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; display: flex; justify-content: center; min-height: 100vh; overflow: hidden; }
-        .container { width: 95%; max-width: 900px; text-align: center; padding: 60px 0; position: relative; z-index: 1; }
-        .card { background: rgba(5,5,5,0.9); border: 1px solid #111; border-left: 4px solid var(--primary-red); padding: 25px; margin-bottom: 30px; text-align: left; }
-        .input-group { display: flex; gap: 15px; margin-top: 15px; }
-        input { flex: 1; background: #000; border: 1px solid #333; color: #fff; padding: 12px; outline: none; }
-        button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { box-shadow: 0 0 15px var(--primary-red); }
+        :root { --primary-red: #ff0000; --bg-dark: #050505; }
         
-        footer { margin-top: 50px; }
+        /* BAN EKRANI */
+        #ban-screen { display: none; position: fixed; inset: 0; background: #000; color: red; z-index: 100000; justify-content: center; align-items: center; flex-direction: column; font-family: 'Consolas', monospace; text-align: center; }
+        
+        body { margin: 0; padding: 0; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); background-size: cover; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
+        
+        .container { width: 95%; max-width: 900px; text-align: center; padding: 60px 0; position: relative; z-index: 1; }
+        .card { background: rgba(5,5,5,0.95); border: 1px solid #111; border-left: 4px solid var(--primary-red); padding: 25px; margin-bottom: 30px; text-align: left; }
+        .input-group { display: flex; gap: 15px; margin-top: 15px; }
+        input { flex: 1; background: #000; border: 1px solid #333; color: #fff; padding: 12px; outline: none; font-family: 'Consolas'; }
+        button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { box-shadow: 0 0 15px var(--primary-red); transform: scale(1.02); }
+        
+        footer { margin-top: 50px; opacity: 0.8; }
         .footer-time { color: red; font-weight: bold; margin-bottom: 8px; font-size: 16px; }
         .copyright { color: #888; font-size: 13px; }
         .version { color: #333; font-size: 11px; margin-top: 10px; letter-spacing: 2px; font-weight: bold; }
 
-        /* SQL MONITOR PANEL */
-        #admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background: #000; border: 2px solid red; z-index: 99999; flex-direction: column; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
-        .p-header { background: red; color: white; padding: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
-        .tabs { display: flex; background: #111; }
-        .tab-btn { flex: 1; padding: 15px; border: none; background: transparent; color: #555; cursor: pointer; font-family: 'Consolas'; font-size: 11px; font-weight: bold; }
-        .tab-btn.active { color: white; background: #050505; border-bottom: 3px solid red; }
-        .log-box { flex: 1; overflow-y: auto; padding: 20px; color: #0f0; font-size: 13px; text-align: left; background: #020202; }
-        .ban-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #111; }
-        .action-btns { display: flex; gap: 10px; }
-        .ban-btn { color: red; cursor: pointer; font-size: 10px; border: 1px solid red; padding: 3px 8px; text-transform: uppercase; }
-        .unban-btn { color: #00ff00; cursor: pointer; font-size: 10px; border: 1px solid #00ff00; padding: 3px 8px; text-transform: uppercase; }
-        .ban-btn:hover { background: red; color: white; }
-        .unban-btn:hover { background: #00ff00; color: black; }
+        /* SQL MONITOR PANEL (GUI FIX) */
+        #admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 650px; height: 600px; background: #000; border: 2px solid red; z-index: 99999; flex-direction: column; box-shadow: 0 0 50px rgba(255,0,0,0.6); }
+        .p-header { background: red; color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; cursor: move; }
+        .tabs { display: flex; background: #111; border-bottom: 1px solid #222; }
+        .tab-btn { flex: 1; padding: 15px; border: none; background: transparent; color: #666; cursor: pointer; font-family: 'Consolas'; font-size: 12px; font-weight: bold; transition: 0.2s; }
+        .tab-btn.active { color: #fff; background: var(--bg-dark); border-bottom: 3px solid red; }
+        .log-box { flex: 1; overflow-y: auto; padding: 20px; color: #0f0; font-size: 13px; text-align: left; background: #020202; border: 1px solid #111; margin: 10px; }
+        
+        .ban-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #111; background: rgba(255,255,255,0.02); margin-bottom: 5px; }
+        .action-btns { display: flex; gap: 8px; }
+        .btn-ui { cursor: pointer; font-size: 10px; padding: 4px 10px; text-transform: uppercase; font-weight: bold; border-radius: 2px; border: 1px solid; }
+        .btn-ban { color: red; border-color: red; }
+        .btn-unban { color: #00ff00; border-color: #00ff00; }
+        .btn-ban:hover { background: red; color: #fff; }
+        .btn-unban:hover { background: #00ff00; color: #000; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
     <div id="ban-screen">
-        <h1 style="font-size: 60px; letter-spacing: 5px;">INDEX Mİ ATCAN EZİK :D</h1>
-        <p style="font-size: 18px; color: #fff;">ZODIAC KORUMASINA TAKILDIN.</p>
-        <p id="ban-reason" style="color: #555; margin-top: 10px;"></p>
-        <p style="margin-top: 50px; color: red; letter-spacing: 10px; font-weight: bold;">Z O D I A C</p>
+        <h1 style="font-size: 60px; letter-spacing: 5px; margin: 0;">INDEX Mİ ATCAN EZİK :D</h1>
+        <div style="width: 400px; height: 1px; background: red; margin: 20px 0;"></div>
+        <p style="font-size: 18px; color: #fff; letter-spacing: 2px;">ZODIAC SİSTEMİNDEN KOVULDUN.</p>
+        <p id="ban-reason" style="color: #666; font-style: italic;"></p>
+        <p style="margin-top: 60px; color: red; letter-spacing: 12px; font-weight: bold;">Z O D I A C</p>
     </div>
 
     <div id="main-content" class="container">
-        <h1 style="letter-spacing: 20px; font-size: 80px; margin-bottom: 40px;">ZODIAC</h1>
+        <h1 style="letter-spacing: 25px; font-size: 90px; margin-bottom: 40px; color: white; text-shadow: 0 0 20px red;">ZODIAC</h1>
+        
         <div class="card">
-            <div style="color:red; font-size:11px; font-weight:bold;">[DATABASE] - ADINI MÜHÜRLE</div>
+            <div style="color:red; font-size:11px; font-weight:bold; letter-spacing: 1px;">[SYSTEM-DB] - ADINI MÜHÜRLE</div>
             <div class="input-group">
-                <input type="text" id="nameIn" placeholder="İsim yaz...">
+                <input type="text" id="nameIn" placeholder="Veritabanına isim mühürle...">
                 <button onclick="saveMuhur()">KAYDET</button>
             </div>
         </div>
+
         <footer>
-            <div class="footer-time" id="serverTime">TR/İST: 28.12.2026 17:12:00</div>
+            <div class="footer-time" id="serverTime">TR/İST: 28.12.2026 --:--:--</div>
             <div class="copyright">© 2026 ZODIAC. Tüm hakları saklıdır.</div>
-            <div class="version">ZODIAC v6.5.0-MONITOR</div>
+            <div class="version">ZODIAC v7.0.0-MONITOR-GUI</div>
         </footer>
     </div>
 
     <div id="admin-panel">
         <div class="p-header">
-            <span><i class="fas fa-terminal"></i> ZODIAC SQL TERMINAL</span>
-            <span onclick="closePanel()" style="cursor:pointer; padding: 0 10px;">[X]</span>
+            <span><i class="fas fa-microchip"></i> ZODIAC COMMAND CENTER</span>
+            <span onclick="closePanel()" style="cursor:pointer; color: #fff;">[ KAPAT ]</span>
         </div>
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('muhurler', this)">MÜHÜRLER</button>
             <button class="tab-btn" onclick="switchTab('ziyaretciler', this)">ZİYARETÇİLER</button>
             <button class="tab-btn" onclick="switchTab('ban_listesi', this)">BAN LİSTESİ</button>
         </div>
-        <div id="logBox" class="log-box">Veriler yükleniyor...</div>
+        <div id="logBox" class="log-box">Sistemden veriler çekiliyor...</div>
     </div>
 
     <script>
@@ -80,38 +89,28 @@
         const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRyZ3Jqc2JmbmpscmNlemxicGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5MjQzNjcsImV4cCI6MjA4MjUwMDM2N30.DvA0k3Rund7l5oeqrrG-OuYYnDg75MemDGjKlyO_0Zo";
         let currentTab = 'muhurler';
         let myIP = "";
-        let inputBuffer = "";
+        let kBuf = "";
 
-        // 🎹 L11 KOMBİNASYON KONTROLÜ
+        // 🎹 L11 GİRİŞ KONTROLÜ
         window.addEventListener('keydown', function(e) {
-            inputBuffer += e.key.toUpperCase();
-            if (inputBuffer.length > 3) inputBuffer = inputBuffer.substring(inputBuffer.length - 3);
+            kBuf += e.key.toUpperCase();
+            if (kBuf.length > 3) kBuf = kBuf.substring(kBuf.length - 3);
 
-            if (inputBuffer === "L11") {
+            if (kBuf === "L11") {
                 const panel = document.getElementById('admin-panel');
                 panel.style.display = (panel.style.display === 'flex') ? 'none' : 'flex';
                 if(panel.style.display === 'flex') fetchData(currentTab);
-                inputBuffer = ""; // Reset
+                kBuf = "";
             }
 
-            // F12 ve Ctrl+Shift+I gibi kısayolları engelle ve banla
+            // Geliştirici engeli (F12 / Ctrl+Shift+I)
             if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) {
-                forceBan("Kod inceleme girişimi");
+                forceBan("Kod hırsızlığı teşebbüsü");
                 return false;
             }
         });
 
         function closePanel() { document.getElementById('admin-panel').style.display = 'none'; }
-
-        async function forceBan(reason) {
-            if(!myIP) return;
-            await fetch(`${SB_URL}/ban_listesi`, {
-                method: 'POST',
-                headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ip: myIP, sebep: reason })
-            });
-            window.location.reload();
-        }
 
         async function initSystem() {
             try {
@@ -119,6 +118,19 @@
                 const data = await ipRes.json();
                 myIP = data.ip;
 
+                // Cihaz Bilgisi ve Ziyaretçi Kaydı
+                const ua = navigator.userAgent;
+                let device = "PC";
+                if(/Android/i.test(ua)) device = "Android";
+                else if(/iPhone|iPad/i.test(ua)) device = "iOS";
+
+                await fetch(`${SB_URL}/ziyaretciler`, {
+                    method: 'POST',
+                    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ip: myIP, cihaz_bilgisi: device })
+                });
+
+                // Ban Kontrol
                 const banCheck = await fetch(`${SB_URL}/ban_listesi?ip=eq.${myIP}`, {
                     headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
                 });
@@ -126,7 +138,7 @@
                 if (bans.length > 0) {
                     document.getElementById('main-content').style.display = 'none';
                     document.getElementById('ban-screen').style.display = 'flex';
-                    document.getElementById('ban-reason').innerText = "Sebep: " + bans[0].sebep;
+                    document.getElementById('ban-reason').innerText = "Nedeni: " + bans[0].sebep;
                 }
             } catch (e) {}
         }
@@ -140,14 +152,17 @@
                 const data = await res.json();
                 box.innerHTML = data.map(i => {
                     let val = (table === 'muhurler' ? i.isim : i.ip);
-                    let device = i.cihaz_bilgisi ? ` <span style="color:#555">[${i.cihaz_bilgisi}]</span>` : "";
-                    let actions = (table === 'ban_listesi') ? 
-                        `<span class="unban-btn" onclick="unbanUser('${i.ip}')">BAN KALDIR</span>` : 
-                        `<span class="ban-btn" onclick="banUser('${val}')">BANLA</span>`;
+                    let info = i.cihaz_bilgisi ? ` <span style="color:#444">[${i.cihaz_bilgisi}]</span>` : "";
+                    let btn = (table === 'ban_listesi') ? 
+                        `<span class="btn-ui btn-unban" onclick="unbanUser('${i.ip}')">YASAĞI KALDIR</span>` : 
+                        `<span class="btn-ui btn-ban" onclick="banUser('${val}')">SİSTEMDEN AT</span>`;
 
-                    return `<div class="ban-row"><span>> ${val}${device} ${table === 'ban_listesi' ? '- ' + i.sebep : ''}</span><div class="action-btns">${actions}</div></div>`;
+                    return `<div class="ban-row">
+                        <span>> ${val}${info} ${table === 'ban_listesi' ? '<br><small style="color:red">! '+i.sebep+'</small>' : ''}</span>
+                        <div class="action-btns">${btn}</div>
+                    </div>`;
                 }).join('');
-            } catch (e) { box.innerHTML = "Veri çekme hatası."; }
+            } catch (e) { box.innerHTML = "Veritabanı bağlantı hatası."; }
         }
 
         async function unbanUser(targetIP) {
@@ -156,7 +171,6 @@
                 method: 'DELETE',
                 headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
             });
-            alert("Sistem erişimi geri verildi.");
             fetchData('ban_listesi');
         }
 
@@ -169,6 +183,16 @@
                 body: JSON.stringify({ ip: target, sebep: s })
             });
             fetchData(currentTab);
+        }
+
+        async function forceBan(reason) {
+            if(!myIP) return;
+            await fetch(`${SB_URL}/ban_listesi`, {
+                method: 'POST',
+                headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ip: myIP, sebep: reason })
+            });
+            window.location.reload();
         }
 
         async function saveMuhur() {
