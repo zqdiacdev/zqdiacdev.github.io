@@ -11,42 +11,74 @@
     
     <style>
         :root { --primary-red: #ff0000; }
-        #ban-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 1000000; color: #fff; flex-direction: column; justify-content: center; align-items: center; font-family: 'Arial Black', sans-serif; text-align: center; }
+        
+        #ban-screen { 
+            display: none; position: fixed; inset: 0; background: #000; z-index: 1000000; 
+            color: #fff; flex-direction: column; justify-content: center; align-items: center; 
+            font-family: 'Arial Black', sans-serif; text-align: center; 
+        }
         #ban-screen h1 { font-size: clamp(30px, 8vw, 70px); color: red; margin: 0; text-shadow: 0 0 30px red; }
-        @keyframes rgbBorder { 0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; } 33% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; } 66% { border-color: #0000ff; box-shadow: 0 0 15px #0000ff; } 100% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; } }
-        @keyframes glow { 0% { opacity: 1; } 50% { opacity: 0.5; filter: brightness(1.5); } 100% { opacity: 1; } }
+
+        @keyframes rgbBorder {
+            0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
+            33% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; }
+            66% { border-color: #0000ff; box-shadow: 0 0 15px #0000ff; }
+            100% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
+        }
+
+        @keyframes glow {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; filter: brightness(1.5); }
+            100% { opacity: 1; }
+        }
+
         body { margin: 0; padding: 0; background: linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.78)), url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3dmN3Jka2l2bnZmajIwcm1qdTlpeW52ODF2aWRqZWkzNGl3d3IweSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/w0YROIlXXXl5k0yyvW/giphy.gif'); background-size: cover; background-position: center; background-attachment: fixed; color: #eee; font-family: 'Consolas', monospace; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; overflow-y: auto; overflow-x: hidden; }
+        
         .container { width: 95%; max-width: 900px; text-align: center; padding: 60px 0; z-index: 1; }
         .zodiac-title { font-size: clamp(50px, 12vw, 100px); font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 20px; margin-bottom: 50px; display: inline-block; }
+        
         .card { background: rgba(5, 5, 5, 0.9); border: 1px solid rgba(255, 0, 0, 0.2); border-left: 4px solid var(--primary-red); padding: 25px; margin-bottom: 20px; text-align: left; }
         .input-group { display: flex; gap: 15px; margin-top: 15px; }
         input { flex: 1; background: rgba(0, 0, 0, 0.8); border: 1px solid #333; color: #fff; padding: 12px; outline: none; border-radius: 0; }
+        
         button { background: var(--primary-red); color: #fff; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         button:hover { animation: glow 0.8s infinite; }
+
         .guild-panel { background: rgba(5, 5, 5, 0.98); border: 1px solid rgba(255, 255, 255, 0.05); display: flex; justify-content: space-between; align-items: center; padding: 25px 40px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 30px; }
         .info-grid { display: flex; gap: 40px; }
         .guild-item { border-left: 3px solid var(--primary-red); padding-left: 18px; text-align: left; }
         .tag { display: block; color: var(--primary-red); font-size: 11px; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
         .val { font-size: 18px; font-weight: bold; color: #fff; }
+        
         .social-links { display: flex; gap: 20px; align-items: center; }
         .social-links a { color: white; font-size: 30px; transition: 0.3s; text-decoration: none; }
         .social-links a:hover { color: var(--primary-red); transform: translateY(-5px); filter: drop-shadow(0 0 10px red); }
         .avatar-frame { border: 2px solid var(--primary-red); padding: 2px; line-height: 0; }
         .avatar-frame img { width: 85px; height: 85px; object-fit: cover; }
-        #admin-panel { display: none; position: fixed; top: 100px; left: 100px; width: 700px; height: 500px; background: #000; border: 2px solid red; z-index: 9999; flex-direction: column; overflow: hidden; resize: both; animation: rgbBorder 5s infinite; }
+
+        #admin-panel { 
+            display: none; position: fixed; top: 100px; left: 100px; 
+            width: 700px; height: 500px; 
+            background: #000; border: 2px solid red; z-index: 9999; 
+            flex-direction: column; overflow: hidden;
+            resize: both; 
+            animation: rgbBorder 5s infinite;
+        }
         .p-header { background: #111; color: white; padding: 12px; cursor: move; font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; border-bottom: 1px solid #222; }
         .p-tabs { display: flex; background: #080808; }
         .t-btn { flex: 1; padding: 12px; border: none; background: transparent; color: #555; font-size: 10px; cursor: pointer; font-weight: bold; border-bottom: 2px solid transparent; }
         .t-btn.active { color: white; background: #111; border-bottom: 2px solid red; }
         .t-content { flex: 1; overflow-y: auto; padding: 15px; color: #0f0; font-size: 11px; background: #050505; }
+        
         .data-row { border-bottom: 1px solid #222; padding: 12px 5px; display: flex; justify-content: space-between; align-items: center; }
         .ban-btn { background: red; color: white; border: none; padding: 8px 15px; cursor: pointer; font-size: 10px; font-weight: bold; }
         .unban-btn { background: #00ff00; color: #000; border: none; padding: 4px 8px; cursor: pointer; font-size: 9px; font-weight: bold; }
+
         #auth-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000; justify-content: center; align-items: center; }
         footer { margin-top: 50px; color: #444; font-size: 12px; }
     </style>
 </head>
-<body onkeydown="checkKeys(event);">
+<body oncontextmenu="return false;" onkeydown="checkKeys(event);">
 
     <div id="ban-screen">
         <h1>ACCESS DENIED</h1>
@@ -56,6 +88,7 @@
 
     <div class="container" id="main-content">
         <h1 class="zodiac-title">ZODIAC</h1>
+
         <div class="card">
             <div style="color: var(--primary-red); font-size: 11px; font-weight: bold;">[SQL TERMINAL] - ADINI MÜHÜRLE</div>
             <div class="input-group">
@@ -63,7 +96,11 @@
                 <button onclick="generateMemory()">KAYDET</button>
             </div>
         </div>
-        <div id="memory-display" style="display:none; margin-bottom: 20px;"><canvas id="memoryCanvas" style="width:100%; border: 2px solid var(--primary-red);"></canvas></div>
+
+        <div id="memory-display" style="display:none; margin-bottom: 20px;">
+            <canvas id="memoryCanvas" style="width:100%; border: 2px solid var(--primary-red);"></canvas>
+        </div>
+
         <div class="guild-panel">
             <div class="info-grid">
                 <div class="guild-item"><span class="tag">Owner</span><span class="val">Zodiac</span></div>
@@ -77,10 +114,11 @@
                 <img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif" alt="PIRATE">
             </div>
         </div>
+
         <footer>
             <div id="serverTime" style="color: red; font-weight: bold; margin-bottom: 5px;">Yükleniyor...</div>
             <div>© 2026 ZODIAC. Tüm hakları saklıdır.</div>
-            <div style="font-size:9px; margin-top:5px; color:#222;">ZODIAC v10.3-ARMORED CLOUD</div>
+            <div style="font-size:9px; margin-top:5px; color:#222;">ZODIAC v10.2-ARMORED CLOUD</div>
         </footer>
     </div>
 
@@ -127,21 +165,6 @@
             return `${os} (${navigator.platform})`;
         }
 
-        // PANEL TETİKLEME GARANTİSİ
-        function checkKeys(e) {
-            const key = e.key.toUpperCase();
-            buffer += key;
-            // Buffer'ı kısa tut
-            if (buffer.length > 5) buffer = buffer.substring(buffer.length - 3);
-            
-            // L-1-1 kombinasyonunu yakala
-            if (buffer.endsWith("L11")) {
-                document.getElementById('auth-overlay').style.display = 'flex';
-                document.getElementById('mPass').focus();
-                buffer = ""; // Sıfırla
-            }
-        }
-
         async function checkSecurity() {
             const ip = await getIP();
             const id = getID();
@@ -156,51 +179,62 @@
         checkSecurity();
 
         async function generateMemory() {
-            const name = document.getElementById('nameInput').value;
+            const nameInput = document.getElementById('nameInput');
+            const name = nameInput.value;
             if(!name) return;
             const ip = await getIP();
             const id = getID();
             const dev = getFullDevice();
-            await _supabase.from('muhurler').insert([{ name: name, ip: ip, device_id: id, device_info: dev }]);
-            
-            const c = document.getElementById('memoryCanvas'); const ctx = c.getContext('2d');
+
+            await _supabase.from('muhurler').insert([{ 
+                name: name, ip: ip, device_id: id, device_info: dev 
+            }]);
+
+            // SİYAH EKRAN (CANVAS) ÇIKTISI - Orijinal mantık
+            const c = document.getElementById('memoryCanvas'); 
+            const ctx = c.getContext('2d');
             c.width = 800; c.height = 150;
             ctx.fillStyle="#000"; ctx.fillRect(0,0,800,150);
             ctx.fillStyle="#fff"; ctx.font="bold 40px Courier New"; ctx.textAlign="center";
             ctx.fillText(name.toUpperCase(), 400, 85);
+            
             document.getElementById('memory-display').style.display="block";
-            document.getElementById('nameInput').value = "";
+            nameInput.value = "";
             if(isAdmin) renderLogs();
         }
 
         async function renderLogs() {
             const { data } = await _supabase.from('muhurler').select('*').order('created_at', { ascending: false });
             const logTab = document.getElementById('l-tab');
+            
             logTab.innerHTML = data.map(m => {
                 const d = new Date(m.created_at);
-                const fullDate = d.toLocaleDateString('tr-TR') + " " + d.toLocaleTimeString('tr-TR');
+                const dateStr = d.toLocaleDateString('tr-TR');
+                const timeStr = d.toLocaleTimeString('tr-TR'); 
+                
                 return `
                     <div class="data-row">
                         <div style="flex: 1;">
                             <div style="display: flex; align-items: baseline; gap: 8px;">
                                 <span style="color: #0f0; font-weight: bold; font-size: 13px;">${m.name}</span>
-                                <span style="color: #444; font-size: 9px; font-family: 'Courier New';">[${fullDate}]</span>
+                                <span style="color: #444; font-size: 9px; font-family: 'Courier New';">[${dateStr} ${timeStr}]</span>
                             </div>
                             <div style="font-size: 9px; color: #777; margin-top: 3px;">
                                 <span style="color: red;">IP:</span> ${m.ip} | <span style="color: red;">ID:</span> ${m.device_id}
                             </div>
-                            <div style="font-size: 9px; color: #444;">
-                                <i class="fas fa-microchip"></i> ${m.device_info}
+                            <div style="font-size: 9px; color: #444; font-style: italic;">
+                                <i class="fas fa-microchip" style="font-size: 8px;"></i> ${m.device_info}
                             </div>
                         </div>
                         <button class="ban-btn" onclick="banProcess('${m.ip}', '${m.device_id}')">BAN</button>
-                    </div>`;
+                    </div>
+                `;
             }).join('');
         }
 
         async function banProcess(ip, id) {
             await _supabase.from('bans').insert([{ ip, device_id: id }]);
-            alert("ERİŞİM ENGELLENDİ.");
+            alert("SİSTEMDEN MEN EDİLDİ.");
             renderBans();
         }
 
@@ -210,12 +244,24 @@
                 <div class="data-row">
                     <span>${b.ip} <small style="color:#444">(${b.device_id})</small></span>
                     <button class="unban-btn" onclick="unbanProcess('${b.id}')">KALDIR</button>
-                </div>`).join('');
+                </div>
+            `).join('');
         }
 
         async function unbanProcess(id) {
             await _supabase.from('bans').delete().eq('id', id);
             renderBans();
+        }
+
+        function checkKeys(e) {
+            buffer += e.key.toUpperCase();
+            if (buffer.length > 5) buffer = buffer.substring(buffer.length - 3);
+            
+            if(buffer.endsWith("L11")) { 
+                document.getElementById('auth-overlay').style.display='flex'; 
+                document.getElementById('mPass').focus();
+                buffer = ""; 
+            }
         }
 
         function verify() {
@@ -237,7 +283,7 @@
         }
 
         async function systemReset() {
-            if(confirm("Tüm database temizlenecek?")) {
+            if(confirm("Tüm mühürler silinecek. Onaylıyor musun?")) {
                 await _supabase.from('muhurler').delete().neq('name', '0');
                 renderLogs();
             }
