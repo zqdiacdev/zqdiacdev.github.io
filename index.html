@@ -14,7 +14,7 @@
 
         /* GİRİŞ EKRANI */
         #entry-overlay { position: fixed; inset: 0; background: #000; z-index: 2000000; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Consolas', monospace; }
-        .entry-btn { background: transparent; color: red; border: 2px solid red; padding: 15px 40px; font-size: 20px; cursor: pointer; font-weight: bold; letter-spacing: 5px; transition: 0.3s; box-shadow: 0 0 20px rgba(255,0,0,0.2); -webkit-tap-highlight-color: transparent; }
+        .entry-btn { background: transparent; color: red; border: 2px solid red; padding: 15px 40px; font-size: 20px; cursor: pointer; font-weight: bold; letter-spacing: 5px; transition: 0.3s; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
         .entry-btn:hover { background: red; color: white; box-shadow: 0 0 50px red; }
 
         /* BAN EKRANI */
@@ -42,13 +42,15 @@
         .social-links a { color: white; font-size: 30px; transition: 0.3s; text-decoration: none; }
         .avatar-frame { border: 2px solid var(--primary-red); padding: 2px; line-height: 0; }
         .avatar-frame img { width: 85px; height: 85px; object-fit: cover; }
-        #admin-panel { display: none; position: fixed; top: 100px; left: 100px; width: 900px; height: 550px; background: #000; border: 2px solid red; z-index: 9999; flex-direction: column; overflow: hidden; resize: both; animation: rgbBorder 5s infinite; }
+        
+        /* Admin Panel Responsive Fix */
+        #admin-panel { display: none; position: fixed; top: 5%; left: 5%; width: 90%; height: 80%; background: #000; border: 2px solid red; z-index: 9999; flex-direction: column; overflow: hidden; animation: rgbBorder 5s infinite; }
         .p-header { background: #111; color: white; padding: 12px; cursor: move; font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; border-bottom: 1px solid #222; }
-        .p-tabs { display: flex; background: #080808; }
-        .t-btn { flex: 1; padding: 12px; border: none; background: transparent; color: #555; font-size: 10px; cursor: pointer; font-weight: bold; border-bottom: 2px solid transparent; }
+        .p-tabs { display: flex; background: #080808; overflow-x: auto; }
+        .t-btn { flex: 1; min-width: 100px; padding: 12px; border: none; background: transparent; color: #555; font-size: 10px; cursor: pointer; font-weight: bold; border-bottom: 2px solid transparent; }
         .t-btn.active { color: white; background: #111; border-bottom: 2px solid red; }
         .t-content { flex: 1; overflow-y: auto; padding: 15px; color: #0f0; font-size: 11px; background: #050505; }
-        .data-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        .data-table { width: 100%; border-collapse: collapse; }
         .data-table th { text-align: left; color: red; border-bottom: 1px solid #333; padding: 10px; font-size: 10px; }
         .data-table td { padding: 10px; border-bottom: 1px solid #111; font-family: 'Courier New'; font-size: 11px; }
         #auth-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000; justify-content: center; align-items: center; }
@@ -57,27 +59,27 @@
 <body onkeydown="checkKeys(event);">
 
     <div id="entry-overlay">
-        <div style="color:red; margin-bottom: 20px; font-size: 12px; letter-spacing: 2px;">ZODIAC SYSTEM v10.9-M GHOST INITIALIZING...</div>
-        <button class="entry-btn" onclick="startSystem()">GEL HATIRA BIRAK</button>
+        <div style="color:red; margin-bottom: 20px; font-size: 11px; letter-spacing: 2px; text-align: center;">ZODIAC SYSTEM v11.0<br>SECURE INITIALIZING...</div>
+        <button class="entry-btn" onclick="startSystem()">GİRİŞ YAP</button>
     </div>
 
     <audio id="bgMusic" loop preload="auto"><source src="sarki.mp3" type="audio/mpeg"></audio>
 
     <div id="music-widget" style="display:none;">
-        <div style="color:red; font-size:9px; font-weight:bold;">[ZODIAC AUDIO]</div>
-        <button class="m-btn" id="mToggle" onclick="toggleMusic()" style="background:transparent; border:1px solid red; color:white; padding:5px 10px; cursor:pointer; font-family:'Consolas'; font-size:10px;">DURAKLAT</button>
+        <div style="color:red; font-size:9px; font-weight:bold;">[AUDIO]</div>
+        <button id="mToggle" onclick="toggleMusic()" style="background:transparent; border:1px solid red; color:white; padding:5px 10px; cursor:pointer; font-size:10px;">DURAKLAT</button>
     </div>
 
     <div id="ban-screen">
-        <h1>BAN YEDİN AMIN EVLADI</h1>
-        <p>AÇIKMI ARIYCAN EZİK XD.</p>
+        <h1>ERİŞİM ENGELLENDİ</h1>
+        <p>SİSTEMDEN UZAKLAŞTIRILDINIZ.</p>
         <div id="ban-details" style="color:red; font-size:10px; margin-top:20px;"></div>
     </div>
 
     <div class="container" id="main-content">
         <h1 class="zodiac-title">ZODIAC</h1>
         <div class="card">
-            <div style="color: var(--primary-red); font-size: 11px; font-weight: bold;">[HATIRA BIRAK] - ADINI MÜHÜRLE</div>
+            <div style="color: var(--primary-red); font-size: 11px; font-weight: bold;">[MÜHÜRLE]</div>
             <div class="input-group">
                 <input type="text" id="nameInput" placeholder="Kullanıcı adını mühürle...">
                 <button onclick="generateMemory()">KAYDET</button>
@@ -98,18 +100,17 @@
                 </div>
             </div>
             <div class="avatar-frame">
-                <img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif" alt="PIRATE">
+                <img src="https://media1.tenor.com/m/RGKmxubE6UUAAAAd/pirate.gif">
             </div>
         </div>
         <footer>
-            <div id="serverTime" style="color: red; font-weight: bold; margin-bottom: 5px;">Yükleniyor...</div>
-            <div>© 2026 ZODIAC. Tüm hakları saklıdır.</div>
-            <div style="font-size:9px; margin-top:5px; color:#222;">ZODIAC v10.9-MOBILE ARMORED</div>
+            <div id="serverTime" style="color: red; font-weight: bold;"></div>
+            <div style="font-size:9px; color:#444; margin-top:10px;">ZODIAC v11.0 ARMORED</div>
         </footer>
     </div>
 
     <div id="admin-panel">
-        <div class="p-header" id="pDraggable"><span><i class="fas fa-shield-alt"></i> ZODIAC COMMAND CENTER</span><span onclick="this.parentElement.parentElement.style.display='none'" style="cursor:pointer;">[X]</span></div>
+        <div class="p-header" id="pDraggable"><span>ZODIAC COMMAND CENTER</span><span onclick="this.parentElement.parentElement.style.display='none'">[X]</span></div>
         <div class="p-tabs">
             <button class="t-btn active" onclick="tab(event, 'l-tab')">MÜHÜRLER</button>
             <button class="t-btn" onclick="tab(event, 'v-tab')">ZİYARETÇİLER</button>
@@ -118,80 +119,79 @@
         <div id="l-tab" class="t-content" style="display:block;"><table class="data-table"><thead><tr><th>Tarih</th><th>İsim</th><th>IP</th><th>İşlem</th></tr></thead><tbody id="log-body"></tbody></table></div>
         <div id="v-tab" class="t-content" style="display:none;"><table class="data-table"><thead><tr><th>Saat</th><th>IP</th><th>Cihaz</th></tr></thead><tbody id="visitor-body"></tbody></table></div>
         <div id="b-tab" class="t-content" style="display:none;"></div>
-        <div style="padding:10px; background:#111;"><button onclick="systemReset()" style="width:100%; background:#222; color:red; border:none; padding:8px; font-size:9px; cursor:pointer;">DATABASE RESET</button></div>
+        <div style="padding:10px; background:#111;"><button onclick="systemReset()" style="width:100%; background:#222; color:red; border:none; padding:8px; font-size:9px;">DATABASE RESET</button></div>
     </div>
 
     <div id="auth-overlay">
-        <div style="border: 2px solid red; padding: 40px; background: #000; text-align: center;">
-            <p style="color:red; font-weight:bold;">ŞİFRE GİR</p>
-            <input type="password" id="mPass" style="background:#000; color:#fff; border:1px solid #444; padding:15px; text-align:center; width:220px; outline:none; margin: 20px 0;">
-            <button onclick="verify()">ENTER</button>
+        <div style="border: 2px solid red; padding: 30px; background: #000; text-align: center;">
+            <p style="color:red;">ADMIN AUTH</p>
+            <input type="password" id="mPass" style="background:#000; color:#fff; border:1px solid #444; padding:10px; width:150px; margin-bottom:10px;">
+            <br><button onclick="verify()">GİRİŞ</button>
         </div>
     </div>
 
     <script>
-        // --- MOBİL UYUMLU KRİTİK AYARLAR ---
         const SUPABASE_URL = 'https://drgrjsbfnjlrcezlbpkv.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRyZ3Jqc2JmbmpscmNlemxicGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5MjQzNjcsImV4cCI6MjA4MjUwMDM2N30.DvA0k3Rund7l5oeqrrG-OuYYnDg75MemDGjKlyO_0Zo';
-        
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-            auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
-        });
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        let userIP = "0.0.0.0";
+        let userIP = "Yükleniyor...";
         let isAdmin = false;
         let buffer = "";
-        let isTerminated = false;
 
         const getID = () => btoa(navigator.userAgent).substring(10, 25);
         const getNow = () => new Date().toLocaleString('tr-TR');
 
-        // --- MOBİL GİRİŞ MOTORU ---
+        // --- GÜVENLİ SİSTEM BAŞLATICI (MOBİL FİX) ---
         async function startSystem() {
             const btn = document.querySelector('.entry-btn');
-            btn.innerText = "YÜKLENİYOR...";
+            btn.innerText = "BAĞLANIYOR...";
             btn.disabled = true;
 
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5 sn limit
-
             try {
-                // IP Çekme (Hızlı servis)
+                // IP Alımı (Hata verirse durmaz)
                 try {
-                    const r = await fetch('https://api.db-ip.com/v2/free/self', { signal: controller.signal });
+                    const r = await fetch('https://api.ipify.org?format=json');
                     const d = await r.json();
-                    userIP = d.ipAddress;
+                    userIP = d.ip;
                 } catch(e) { userIP = "Mobil_User"; }
-                
-                clearTimeout(timeoutId);
+
                 const id = getID();
 
-                // Ban Kontrol (Sessiz mod)
+                // Ban Kontrolü
                 try {
                     const { data: banData } = await _supabase.from('bans').select('ip').or(`ip.eq.${userIP},device_id.eq.${id}`).maybeSingle();
                     if (banData) {
                         terminateUI(userIP, id);
                         return;
                     }
-                } catch(e) { console.log("DB Bypass"); }
+                } catch(e) { console.warn("DB Check Bypass"); }
 
-                // Girişi Başlat
+                // UI Açılış
                 document.getElementById('entry-overlay').style.display = "none";
                 document.getElementById('music-widget').style.display = "flex";
                 
                 const music = document.getElementById('bgMusic');
-                music.play().catch(() => { console.log("Müzik için etkileşim bekleniyor"); });
+                music.play().catch(() => {
+                    console.log("Müzik için etkileşim bekleniyor.");
+                });
 
-                // Arka planda ziyaret kaydı
+                // Arka Plan Kaydı
                 _supabase.from('ziyaretciler').insert([{ ip: userIP, device_id: id, device_info: navigator.platform }]).then();
 
-            } catch (e) {
-                // Hata ne olursa olsun mobilde ekranı aç
+            } catch (err) {
+                // En kötü senaryoda sistemi zorla aç
                 document.getElementById('entry-overlay').style.display = "none";
             }
         }
 
-        // --- DİĞER FONKSİYONLAR (Admin, Mühür, Ban...) ---
+        function terminateUI(ip, id) {
+            document.getElementById('main-content').innerHTML = "";
+            document.getElementById('entry-overlay').style.display = "none";
+            document.getElementById('ban-screen').style.display = 'flex';
+            document.getElementById('ban-details').innerText = `ID: ${id} | IP: ${ip}`;
+        }
+
         function toggleMusic() {
             const a = document.getElementById('bgMusic');
             const b = document.getElementById('mToggle');
@@ -217,12 +217,7 @@
             if(isAdmin) renderLogs();
         }
 
-        // Kısayol Tuşları ve Diğer Sistemler
         function checkKeys(e) {
-            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) {
-                e.preventDefault();
-                autoBan("Forbidden Key Attempt");
-            }
             if (e.target.tagName === 'INPUT') return;
             buffer += e.key.toUpperCase();
             if(buffer.endsWith("L11")) {
@@ -232,29 +227,29 @@
             }
         }
 
-        // Admin panel, renderLogs, manualBan vb. fonksiyonlar orijinal kodunla aynı şekilde çalışır...
         async function renderLogs() {
             const { data: mData } = await _supabase.from('muhurler').select('*').order('created_at', { ascending: false });
-            document.getElementById('log-body').innerHTML = mData.map(m => `<tr><td>${new Date(m.created_at).toLocaleTimeString()}</td><td>${m.name}</td><td>${m.ip}</td><td><button style="background:red; color:white; border:none; cursor:pointer; font-size:9px; padding:2px 5px;" onclick="manualBan('${m.ip}','${m.device_id}')">BAN</button></td></tr>`).join('');
+            document.getElementById('log-body').innerHTML = mData ? mData.map(m => `<tr><td>${new Date(m.created_at).toLocaleTimeString()}</td><td>${m.name}</td><td>${m.ip}</td><td><button style="background:red; font-size:9px;" onclick="manualBan('${m.ip}','${m.device_id}')">BAN</button></td></tr>`).join('') : '';
+            
             const { data: vData } = await _supabase.from('ziyaretciler').select('*').order('created_at', { ascending: false }).limit(20);
-            document.getElementById('visitor-body').innerHTML = vData.map(v => `<tr><td>${new Date(v.created_at).toLocaleTimeString()}</td><td>${v.ip}</td><td>${v.device_info}</td></tr>`).join('');
+            document.getElementById('visitor-body').innerHTML = vData ? vData.map(v => `<tr><td>${new Date(v.created_at).toLocaleTimeString()}</td><td>${v.ip}</td><td>${v.device_info}</td></tr>`).join('') : '';
         }
 
         async function manualBan(ip, id) { 
-            if(confirm("Yasakla?")) { 
-                await _supabase.from('bans').insert([{ ip: ip, device_id: id, reason: "Manual Admin Ban" }]); 
+            if(confirm("Yasaklansın mı?")) { 
+                await _supabase.from('bans').insert([{ ip, device_id: id, reason: "Manual" }]); 
                 renderBans(); 
             } 
         }
 
         async function renderBans() { 
             const { data } = await _supabase.from('bans').select('*').order('created_at', { ascending: false }); 
-            document.getElementById('b-tab').innerHTML = data.map(b => `
-                <div style="padding:10px; border-bottom:1px solid #222; display:flex; justify-content:space-between; align-items:center; background:#080808; margin-bottom:2px;">
-                    <div><span style="color:red; font-size:11px;">${b.ip}</span></div>
-                    <button onclick="unban('${b.id}')" style="background:transparent; border:1px solid #444; color:#fff; padding:4px 10px; cursor:pointer; font-size:10px;">KALDIR</button>
+            document.getElementById('b-tab').innerHTML = data ? data.map(b => `
+                <div style="padding:10px; border-bottom:1px solid #222; display:flex; justify-content:space-between; background:#080808;">
+                    <span style="color:red; font-size:10px;">${b.ip}</span>
+                    <button onclick="unban('${b.id}')" style="background:transparent; border:1px solid #444; color:#fff; font-size:9px;">KALDIR</button>
                 </div>
-            `).join(''); 
+            `).join('') : ''; 
         }
 
         async function unban(id) { 
@@ -279,29 +274,15 @@
             if(id === 'b-tab') renderBans();
         }
 
-        setInterval(() => { document.getElementById('serverTime').innerText = `TR/İST: ${getNow()}`; }, 1000);
-
-        const p = document.getElementById("admin-panel");
-        const dz = document.getElementById("pDraggable");
-        let active = false, oX, oY;
-        dz.onmousedown = (e) => { active = true; oX = e.clientX - p.offsetLeft; oY = e.clientY - p.offsetTop; };
-        document.onmousemove = (e) => { if(active) { p.style.left = (e.clientX - oX) + "px"; p.style.top = (e.clientY - oY) + "px"; } };
-        document.onmouseup = () => active = false;
-
         async function systemReset() {
-            if(confirm("SİL?")) {
+            if(confirm("TÜM VERİLER SİLİNSİN Mİ?")) {
                 await _supabase.from('muhurler').delete().neq('id', 0);
                 await _supabase.from('ziyaretciler').delete().neq('id', 0);
                 renderLogs();
             }
         }
-        
-        function terminateUI(ip, id) {
-            document.getElementById('main-content').innerHTML = "";
-            document.getElementById('entry-overlay').style.display = "none";
-            document.getElementById('ban-screen').style.display = 'flex';
-            document.getElementById('ban-details').innerText = `ID: ${id} | IP: ${ip}`;
-        }
+
+        setInterval(() => { document.getElementById('serverTime').innerText = `TR/IST: ${getNow()}`; }, 1000);
     </script>
 </body>
 </html>
